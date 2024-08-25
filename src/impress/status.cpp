@@ -3,6 +3,6 @@
 using namespace std;
 using namespace impress;
 
-const string &status_to_string(impress::Status status) {
+const string &impress::status_to_string(Status status) {
     return STATUS_MAP.at(status); // TODO check if key exists
 }
