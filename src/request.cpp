@@ -1,6 +1,7 @@
 #include "request.h"
 
 using namespace std;
+using namespace impress;
 
 Request::Request(
         string &raw,

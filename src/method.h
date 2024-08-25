@@ -1,29 +1,31 @@
 #ifndef IMPRESSHTTP_METHOD_H
 #define IMPRESSHTTP_METHOD_H
 
-#include <string>
 #include <map>
+#include <string>
 
-enum class Method {
-    GET,
-    POST,
-    PUT,
-    DELETE,
-    HEAD,
-    OPTIONS,
-    TRACE
-};
+namespace impress {
 
-const std::map<std::string, Method> HTTP_METHODS = {
-        {"GET",     Method::GET},
-        {"POST",    Method::POST},
-        {"PUT",     Method::PUT},
-        {"DELETE",  Method::DELETE},
-        {"HEAD",    Method::HEAD},
-        {"OPTIONS", Method::OPTIONS},
-        {"TRACE",   Method::TRACE}
-};
+    enum class Method {
+        GET,
+        POST,
+        PUT,
+        DELETE,
+        HEAD,
+        OPTIONS,
+        TRACE
+    };
 
-Method get_method(const std::string &method_str);
+    const std::map<std::string, Method> HTTP_METHODS = {
+            {"GET", Method::GET},
+            {"POST", Method::POST},
+            {"PUT", Method::PUT},
+            {"DELETE", Method::DELETE},
+            {"HEAD", Method::HEAD},
+            {"OPTIONS", Method::OPTIONS},
+            {"TRACE", Method::TRACE}};
+
+    Method get_method(const std::string &method_str);
+}// namespace impress
 
 #endif//IMPRESSHTTP_METHOD_H

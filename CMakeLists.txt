@@ -7,4 +7,5 @@ add_executable(
         ImpressHttp src/main.cpp
         src/request.cpp src/request.h
         src/method.cpp src/method.h
+        src/status.cpp src/status.h
         )
