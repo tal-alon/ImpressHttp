@@ -5,9 +5,11 @@ set(CMAKE_CXX_STANDARD 14)
 
 set(COMMON_SOURCES
         src/impress.h
-        src/impress/request.cpp src/impress/request.h
-        src/impress/method.cpp src/impress/method.h
-        src/impress/status.cpp src/impress/status.h)
+        src/impress/http/request.cpp src/impress/http/request.h
+        src/impress/http/method.cpp src/impress/http/method.h
+        src/impress/http/status.cpp src/impress/http/status.h
+        src/impress/logging/logger.cpp
+        src/impress/logging/logger.h)
 
 add_library(impress_http STATIC ${COMMON_SOURCES})
 target_include_directories(impress_http PUBLIC ${CMAKE_SOURCE_DIR}/src)
