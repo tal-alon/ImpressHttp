@@ -1,6 +1,4 @@
-#ifndef IMPRESSHTTP_REQUEST_H
-#define IMPRESSHTTP_REQUEST_H
-
+#pragma once
 #include "./method.h"
 #include <map>
 #include <string>
@@ -28,5 +26,3 @@ namespace impress {
         static Request from_string(const string &request);
     };
 }// namespace impress
-
-#endif//IMPRESSHTTP_REQUEST_H

@@ -1,6 +1,4 @@
-#ifndef IMPRESSHTTP_LOGGER_H
-#define IMPRESSHTTP_LOGGER_H
-
+#pragma once
 #include <string>
 
 
@@ -32,5 +30,3 @@ namespace impress {
     };
 
 }// namespace impress
-
-#endif//IMPRESSHTTP_LOGGER_H

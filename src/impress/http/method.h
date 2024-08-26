@@ -1,6 +1,4 @@
-#ifndef IMPRESSHTTP_METHOD_H
-#define IMPRESSHTTP_METHOD_H
-
+#pragma once
 #include <map>
 #include <string>
 
@@ -27,5 +25,3 @@ namespace impress {
 
     Method get_method(const std::string &method_str);
 }// namespace impress
-
-#endif//IMPRESSHTTP_METHOD_H

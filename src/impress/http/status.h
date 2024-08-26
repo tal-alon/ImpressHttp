@@ -1,6 +1,4 @@
-#ifndef IMPRESSHTTP_STATUS_H
-#define IMPRESSHTTP_STATUS_H
-
+#pragma once
 #include <string>
 #include <map>
 
@@ -41,5 +39,3 @@ namespace impress {
 
     const std::string &status_to_string(Status status);
 }
-
-#endif//IMPRESSHTTP_STATUS_H

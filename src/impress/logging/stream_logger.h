@@ -1,6 +1,4 @@
-#ifndef IMPRESSHTTP_STREAM_LOGGER_H
-#define IMPRESSHTTP_STREAM_LOGGER_H
-
+#pragma once
 #include "logger.h"
 
 namespace impress {
@@ -14,6 +12,3 @@ namespace impress {
         void write(const std::string &message) override;
     };
 }
-
-
-#endif//IMPRESSHTTP_STREAM_LOGGER_H
