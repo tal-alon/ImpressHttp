@@ -4,7 +4,7 @@ project(ImpressHttp)
 set(CMAKE_CXX_STANDARD 14)
 
 set(COMMON_SOURCES
-        src/impress.h
+        src/impress/impress.h
         src/impress/http/request.cpp src/impress/http/request.h
         src/impress/http/method.cpp src/impress/http/method.h
         src/impress/http/status.cpp src/impress/http/status.h
@@ -14,7 +14,7 @@ set(COMMON_SOURCES
         src/impress/logging/stream_logger.h)
 
 add_library(impress_http STATIC ${COMMON_SOURCES})
-target_include_directories(impress_http PUBLIC ${CMAKE_SOURCE_DIR}/src)
+target_include_directories(impress_http PUBLIC ${CMAKE_SOURCE_DIR}/src/impress)
 
 add_executable(main src/main.cpp)
 target_link_libraries(main PRIVATE impress_http)
