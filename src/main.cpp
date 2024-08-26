@@ -1,14 +1,17 @@
 #include <iostream>
 #include <impress.h>
 
+using namespace std;
+using namespace impress;
+
 int main() {
-    std::cout << "Hello, World!" << std::endl;
-    std::cout << IMPRESS_VERSION << std::endl;
+    cout << "Hello, World!" << endl;
+    cout << IMPRESS_VERSION << endl;
 
-    impress::Status status = impress::Status::OK_200;
-    std::cout << "Method: " << impress::status_to_string(status) << std::endl;
+    auto status = Status::OK_200;
+    cout << "Method: " << status_to_string(status) << endl;
 
-    auto logger = impress::StreamLogger(std::cerr);
+    auto logger = StreamLogger(cerr, LogLevel::DEBUG);
     logger.info("Hello, Logger!");
     return 0;
 }

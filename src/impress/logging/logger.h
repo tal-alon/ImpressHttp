@@ -6,17 +6,12 @@
 
 namespace impress {
     enum class LogLevel {
-        DEBUG,
-        INFO,
-        WARN,
-        ERROR
+        DEBUG=0,
+        INFO=10,
+        WARN=20,
+        ERROR=30
     };
 
-    // LogLevel convenience operators
-    constexpr bool operator<(LogLevel lhs, LogLevel rhs);
-    constexpr bool operator<=(LogLevel lhs, LogLevel rhs);
-    constexpr bool operator>(LogLevel lhs, LogLevel rhs);
-    constexpr bool operator>=(LogLevel lhs, LogLevel rhs);
     std::string level_to_string(LogLevel level);
 
     class Logger {

@@ -5,21 +5,6 @@
 using namespace std;
 using namespace impress;
 
-constexpr bool impress::operator<(LogLevel lhs, LogLevel rhs) {
-    return static_cast<int>(lhs) < static_cast<int>(rhs);
-}
-
-constexpr bool impress::operator<=(LogLevel lhs, LogLevel rhs) {
-    return static_cast<int>(lhs) <= static_cast<int>(rhs);
-}
-
-constexpr bool impress::operator>(LogLevel lhs, LogLevel rhs) {
-    return static_cast<int>(lhs) > static_cast<int>(rhs);
-}
-
-constexpr bool impress::operator>=(LogLevel lhs, LogLevel rhs) {
-    return static_cast<int>(lhs) >= static_cast<int>(rhs);
-}
 
 std::string impress::level_to_string(LogLevel level) {
     switch (level) {
