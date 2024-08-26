@@ -3,13 +3,15 @@
 
 #include <string>
 
-const std::string DEBUG = "DEBUG";
-const std::string INFO = "INFO";
-const std::string WARN = "WARN";
-const std::string ERROR = "ERROR";
-
 
 namespace impress {
+    enum class LogLevel {
+        DEBUG,
+        INFO,
+        WARN,
+        ERROR
+    };
+    std::string level_to_string(LogLevel level);
 
     class Logger {
     public:
@@ -19,7 +21,8 @@ namespace impress {
         virtual void error(const std::string &message);
 
     protected:
-        virtual void log(const std::string &level, const std::string &message);
+
+        virtual void log(LogLevel level, const std::string &message);
         virtual void write(const std::string &message) = 0;
     };
 

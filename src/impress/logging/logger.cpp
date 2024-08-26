@@ -3,24 +3,38 @@
 #include <sstream>
 
 using namespace std;
+using namespace impress;
+
+std::string impress::level_to_string(LogLevel level) {
+    switch (level) {
+        case LogLevel::DEBUG:
+            return "DEBUG";
+        case LogLevel::INFO:
+            return "INFO";
+        case LogLevel::WARN:
+            return "WARN";
+        case LogLevel::ERROR:
+            return "ERROR";
+    }
+}
 
 void impress::Logger::debug(const std::string &message) {
-    log(DEBUG, message);
+    log(LogLevel::DEBUG, message);
 }
 
 void impress::Logger::info(const std::string &message) {
-    log(INFO, message);
+    log(LogLevel::INFO, message);
 }
 
 void impress::Logger::warn(const std::string &message) {
-    log(WARN, message);
+    log(LogLevel::WARN, message);
 }
 
 void impress::Logger::error(const std::string &message) {
-    log(ERROR, message);
+    log(LogLevel::ERROR, message);
 }
 
-void impress::Logger::log(const std::string &level, const std::string &message) {
+void impress::Logger::log(LogLevel level, const std::string &message) {
     time_t now = time(nullptr);
     tm local_time{};
     localtime_s(&local_time, &now);
@@ -32,7 +46,13 @@ void impress::Logger::log(const std::string &level, const std::string &message) 
            << local_time.tm_mday << ' '
            << local_time.tm_hour << ':'
            << local_time.tm_min << ':'
-           << local_time.tm_sec
-           << level << ": " << message;
+           << local_time.tm_sec << "] "
+
+           // log level:
+           << level_to_string(level) << ": "
+
+           // message:
+           << message;
+
     write(stream.str());
 }
