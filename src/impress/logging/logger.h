@@ -20,8 +20,6 @@ namespace impress {
     std::string level_to_string(LogLevel level);
 
     class Logger {
-        LogLevel m_level = LogLevel::INFO;
-
     public:
         virtual ~Logger() = default;
         void debug(const std::string &message);
@@ -30,6 +28,7 @@ namespace impress {
         void error(const std::string &message);
 
     protected:
+        LogLevel m_level = LogLevel::INFO;
         virtual void write(const std::string &message) = 0;
 
     private:

@@ -9,7 +9,9 @@ set(COMMON_SOURCES
         src/impress/http/method.cpp src/impress/http/method.h
         src/impress/http/status.cpp src/impress/http/status.h
         src/impress/logging/logger.cpp
-        src/impress/logging/logger.h)
+        src/impress/logging/logger.h
+        src/impress/logging/stream_logger.cpp
+        src/impress/logging/stream_logger.h)
 
 add_library(impress_http STATIC ${COMMON_SOURCES})
 target_include_directories(impress_http PUBLIC ${CMAKE_SOURCE_DIR}/src)
