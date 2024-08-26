@@ -5,6 +5,22 @@
 using namespace std;
 using namespace impress;
 
+constexpr bool impress::operator<(LogLevel lhs, LogLevel rhs) {
+    return static_cast<int>(lhs) < static_cast<int>(rhs);
+}
+
+constexpr bool impress::operator<=(LogLevel lhs, LogLevel rhs) {
+    return static_cast<int>(lhs) <= static_cast<int>(rhs);
+}
+
+constexpr bool impress::operator>(LogLevel lhs, LogLevel rhs) {
+    return static_cast<int>(lhs) > static_cast<int>(rhs);
+}
+
+constexpr bool impress::operator>=(LogLevel lhs, LogLevel rhs) {
+    return static_cast<int>(lhs) >= static_cast<int>(rhs);
+}
+
 std::string impress::level_to_string(LogLevel level) {
     switch (level) {
         case LogLevel::DEBUG:
@@ -35,6 +51,14 @@ void impress::Logger::error(const std::string &message) {
 }
 
 void impress::Logger::log(LogLevel level, const std::string &message) {
+    // only log if the level is greater than or equal to the logger's level
+    if (level < m_level) {
+        return;
+    }
+    _log(level, message);
+}
+
+void Logger::_log(LogLevel level, const string &message) {
     time_t now = time(nullptr);
     tm local_time{};
     localtime_s(&local_time, &now);
