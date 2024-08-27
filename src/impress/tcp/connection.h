@@ -20,7 +20,7 @@ enum class SendStatus {
 class Connection {
     SOCKET m_socket;
     Logger &m_logger;
-    ReceiveStatus m_receive = ReceiveStatus::LISTEN;
+    ReceiveStatus m_receive = ReceiveStatus::LISTEN; // TODO - do we need this?
     SendStatus m_send = SendStatus::IDLE;
     char m_buffer[CONNECTION_BUFFER_SIZE] = {};
     int m_buffer_size = 0;
@@ -29,6 +29,8 @@ class Connection {
 public:
     Connection(SOCKET socket, ReceiveStatus receive, SendStatus send, Logger &logger);
     ~Connection();
+    SOCKET sock_id() const;
+    SendStatus send_status() const;
     SOCKET accept();
     void receive();
     void send(const char *data, int size);

@@ -13,6 +13,14 @@ Connection::~Connection() {
     close();
 }
 
+SOCKET Connection::sock_id() const {
+    return m_socket;
+}
+
+SendStatus Connection::send_status() const {
+    return m_send;
+}
+
 SOCKET Connection::accept() {
     if (m_closed) {
         m_logger.error("Attempted to accept on a closed socket, socket=" + to_string(m_socket));
