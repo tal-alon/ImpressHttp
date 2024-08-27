@@ -16,6 +16,8 @@ std::string impress::level_to_string(LogLevel level) {
             return "WARN";
         case LogLevel::ERROR:
             return "ERROR";
+        default:
+            return "UNKNOWN";
     }
 }
 
