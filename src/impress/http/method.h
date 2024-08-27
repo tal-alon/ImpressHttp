@@ -1,6 +1,8 @@
 #pragma once
 #include <map>
 #include <string>
+#include <optional>
+
 
 namespace impress {
 
@@ -23,5 +25,5 @@ namespace impress {
             {"OPTIONS", Method::OPTIONS},
             {"TRACE", Method::TRACE}};
 
-    Method get_method(const std::string &method_str);
+    std::optional<Method> get_method(const std::string &method_str);
 }// namespace impress
