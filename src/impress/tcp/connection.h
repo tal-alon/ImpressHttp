@@ -1,6 +1,8 @@
 #pragma once
 
 #include <WinSock2.h>
+#include <string>
+#include "../logging/logger.h"
 
 constexpr int CONNECTION_BUFFER_SIZE = 4096;
 
@@ -17,6 +19,7 @@ enum class SendStatus {
 
 class Connection {
     SOCKET m_socket;
+    Logger &m_logger;
     ReceiveStatus m_receive = ReceiveStatus::LISTEN;
     SendStatus m_send = SendStatus::IDLE;
     char m_buffer[CONNECTION_BUFFER_SIZE] = {};
@@ -24,12 +27,14 @@ class Connection {
     bool m_closed = false;
 
 public:
-    Connection(SOCKET socket, ReceiveStatus receive, SendStatus send);
+    Connection(SOCKET socket, ReceiveStatus receive, SendStatus send, Logger &logger);
     ~Connection();
+    SOCKET accept();
     void receive();
     void send(const char *data, int size);
     char const *get_buffer() const;
     int get_buffer_size() const;
-    char *pull_from_buffer(int size);
-    void close();
+    char *try_pull_bytes(int size);
+    char *try_pull_until(const std::string &delimiter);
+    void close(bool force = false);
 };
