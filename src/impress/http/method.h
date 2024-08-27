@@ -22,4 +22,5 @@ const std::map<std::string, Method> HTTP_METHODS = {
         {"OPTIONS", Method::OPTIONS},
         {"TRACE", Method::TRACE}};
 
-Method get_method(const std::string &method_str);
+Method str_to_method(const std::string &method_str);
+std::string method_to_string(Method method);
