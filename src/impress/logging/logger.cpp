@@ -3,41 +3,40 @@
 #include <sstream>
 
 using namespace std;
-using namespace impress;
 
 
-std::string impress::level_to_string(LogLevel level) {
+std::string level_to_string(LogLevel level) {
     switch (level) {
-        case LogLevel::DEBUG:
+        case DEBUG_LVL:
             return "DEBUG";
-        case LogLevel::INFO:
+        case INFO_LVL:
             return "INFO";
-        case LogLevel::WARN:
+        case WARN_LVL:
             return "WARN";
-        case LogLevel::ERROR:
+        case ERROR_LVL:
             return "ERROR";
         default:
             return "UNKNOWN";
     }
 }
 
-void impress::Logger::debug(const std::string &message) {
-    log(LogLevel::DEBUG, message);
+void Logger::debug(const std::string &message) {
+    log(DEBUG_LVL, message);
 }
 
-void impress::Logger::info(const std::string &message) {
-    log(LogLevel::INFO, message);
+void Logger::info(const std::string &message) {
+    log(INFO_LVL, message);
 }
 
-void impress::Logger::warn(const std::string &message) {
-    log(LogLevel::WARN, message);
+void Logger::warn(const std::string &message) {
+    log(WARN_LVL, message);
 }
 
-void impress::Logger::error(const std::string &message) {
-    log(LogLevel::ERROR, message);
+void Logger::error(const std::string &message) {
+    log(ERROR_LVL, message);
 }
 
-void impress::Logger::log(LogLevel level, const std::string &message) {
+void Logger::log(LogLevel level, const std::string &message) {
     // only log if the level is greater than or equal to the logger's level
     if (level < m_level) {
         return;

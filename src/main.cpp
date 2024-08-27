@@ -2,7 +2,6 @@
 #include <impress.h>
 
 using namespace std;
-using namespace impress;
 
 int main() {
     cout << "Hello, World!" << endl;
@@ -11,7 +10,10 @@ int main() {
     auto status = Status::OK_200;
     cout << "Method: " << status_to_string(status) << endl;
 
-    auto logger = StreamLogger(cerr, LogLevel::DEBUG);
+    auto logger = StreamLogger(cerr, DEBUG_LVL);
     logger.info("Hello, Logger!");
+
+//    Server server("127.0.0.1", 8080, logger);
+//    server.run();
     return 0;
 }

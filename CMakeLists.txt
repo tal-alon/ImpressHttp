@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.20)
 project(ImpressHttp)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 14)
 
 set(COMMON_SOURCES
         src/impress/impress.h
@@ -11,7 +11,11 @@ set(COMMON_SOURCES
         src/impress/logging/logger.cpp
         src/impress/logging/logger.h
         src/impress/logging/stream_logger.cpp
-        src/impress/logging/stream_logger.h)
+        src/impress/logging/stream_logger.h
+        src/impress/tcp/server.cpp
+        src/impress/tcp/server.h
+        src/impress/tcp/connection.cpp
+        src/impress/tcp/connection.h)
 
 add_library(impress_http STATIC ${COMMON_SOURCES})
 target_include_directories(impress_http PUBLIC ${CMAKE_SOURCE_DIR}/src/impress)

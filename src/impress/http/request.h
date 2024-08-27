@@ -3,26 +3,29 @@
 #include <map>
 #include <string>
 
-using namespace std;
 
-namespace impress {
-    class Request {
-        string m_raw;
-        Method m_method;
-        string m_path;
-        string m_version;
-        string m_body;
-        map<string, string> m_headers;
+class Request {
+    std::string m_raw;
+    Method m_method;
+    std::string m_path;
+    std::string m_version;
+    std::string m_body;
+    std::map<std::string, std::string> m_headers;
 
-    public:
-        Request(string &raw, Method method, string &path, string &version, string &body, map<string, string> &headers);
-        const string &raw() const;
-        Method method() const;
-        const string &path() const;
-        const string &version() const;
-        const string &body() const;
-        const map<string, string> &headers() const;
-        string to_string() const;
-        static Request from_string(const string &request);
-    };
-}// namespace impress
+public:
+    Request(
+            std::string &raw,
+            Method method,
+            std::string &path,
+            std::string &version,
+            std::string &body,
+            std::map<std::string, std::string> &headers);
+    const std::string &raw() const;
+    Method method() const;
+    const std::string &path() const;
+    const std::string &version() const;
+    const std::string &body() const;
+    const std::map<std::string, std::string> &headers() const;
+    std::string to_string() const;
+    static Request from_string(const std::string &request);
+};
