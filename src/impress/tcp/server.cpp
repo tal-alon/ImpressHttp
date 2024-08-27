@@ -1,9 +1,11 @@
 #include "server.h"
 
+#include <utility>
+
 #define _WINSOCK_DEPRECATED_NO_WARNINGS
 using namespace std;
 
-Server::Server(const string &ip, int port, Logger &logger) : m_ip(ip), m_port(port), m_logger(logger) {
+Server::Server(string ip, int port, Logger &logger) : m_ip(std::move(ip)), m_port(port), m_logger(logger) {
     m_address.sin_family = AF_INET;
     m_address.sin_port = htons(m_port);
     m_address.sin_addr.s_addr = inet_addr(m_ip.c_str());
@@ -24,6 +26,7 @@ Server::~Server() {
 
 
 void Server::run() {
+    m_logger.info("Server is running on " + m_ip + ":" + to_string(m_port));
     bind_socket();
     while (true) {
     }

@@ -12,16 +12,16 @@ const int MAX_CONNECTIONS = 10;
 class Server {
     Logger &m_logger;
     WSAData m_wsaData;
-    const std::string &m_ip;
+    std::string m_ip;
     int m_port;
     sockaddr_in m_address;
     SOCKET m_listen_sock;
-    Connection m_connections[MAX_CONNECTIONS] = {};
+    Connection *m_connections[MAX_CONNECTIONS];
     int m_client_count = 0;
     bool m_closed = false;//TODO - check if any bad stuff happens if we close the server twice
 
 public:
-    Server(const std::string &ip, int port, Logger &logger);
+    Server(std::string ip, int port, Logger &logger);
     ~Server();
     void run();
     void close();
