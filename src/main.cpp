@@ -3,7 +3,7 @@
 
 using namespace std;
 
-const string EXAMPLE_REQUEST = "GET / HTTP/1.1\r\n"
+const string EXAMPLE_REQUEST = "GET /index.html?param1=1&param2=2 HTTP/1.1\r\n"
                                "Host: localhost:8080\r\n"
                                "User-Agent: curl/7.68.0\r\n"
                                "Accept: */*\r\n\r\n";

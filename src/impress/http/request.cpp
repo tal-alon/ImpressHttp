@@ -5,33 +5,40 @@ using namespace std;
 
 Request::Request(
         Method method,
-        string &path,
+        Path &path,
         string &version,
         string &body,
         map<string, string> &headers) : m_method(method), m_path(path), m_version(version), m_body(body), m_headers(headers) {}
 
 Method Request::method() const { return m_method; }
-const string &Request::path() const { return m_path; }
+const Path &Request::path() const { return m_path; }
+const std::string &Request::get_query_param(const string &key) const {
+    return m_path.get_param(key);
+}
 const string &Request::version() const { return m_version; }
 const string &Request::body() const { return m_body; }
 void Request::set_body(const string &body) { m_body = body; }
 const map<string, string> &Request::headers() const { return m_headers; }
+const std::string &Request::get_header(const string &key) const {
+    return m_headers.at(key); // TODO - handle missing key
+}
 string Request::to_string() const {
-    return method_to_string(m_method) + " " + m_path + " " + m_version + CRLF;
+    return method_to_string(m_method) + " " + m_path.to_string() + " " + m_version + CRLF;
 }
 
-// TODO Implement a parser for the raw string
 Request Request::from_string(const string &raw) {
     Method method;
-    string path;
+    string path_str;
     string version;
     string body;
 
-    parse_request_line(raw, method, path, version);
+    parse_request_line(raw, method, path_str, version);
+
+    Path path = Path::from_string(path_str);
+
     auto header_start = raw.find(CRLF) + 2;
     auto header_end = raw.find(CRLF CRLF) + 2;
     string header_raw = raw.substr(header_start, header_end - header_start);
-
     map<string, string> headers = parse_headers(header_raw);
 
     return {method, path, version, body, headers};

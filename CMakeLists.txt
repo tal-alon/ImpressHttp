@@ -15,7 +15,9 @@ set(COMMON_SOURCES
         src/impress/tcp/server.cpp
         src/impress/tcp/server.h
         src/impress/tcp/connection.cpp
-        src/impress/tcp/connection.h)
+        src/impress/tcp/connection.h
+        src/impress/http/path.cpp
+        src/impress/http/path.h)
 
 add_library(impress_http STATIC ${COMMON_SOURCES})
 target_include_directories(impress_http PUBLIC ${CMAKE_SOURCE_DIR}/src/impress)
