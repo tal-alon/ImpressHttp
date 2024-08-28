@@ -27,6 +27,9 @@ Server::~Server() {
     close();
 }
 
+void Server::set_router(Router router) {
+    m_router = std::move(router);
+}
 
 void Server::run() {
     m_logger.info("Server is running on " + m_ip + ":" + to_string(m_port));

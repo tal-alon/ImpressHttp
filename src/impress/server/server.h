@@ -6,11 +6,13 @@
 #include "../logging/logger.h"
 #include "../http/request.h"
 #include "connection.h"
+#include "router.h"
 
 
 const int MAX_CONNECTIONS = 10;
 
 class Server {
+    Router m_router;
     Logger &m_logger;
     WSAData m_wsaData;
     std::string m_ip;
@@ -25,6 +27,7 @@ class Server {
 public:
     Server(std::string ip, int port, Logger &logger);
     ~Server();
+    void set_router(Router router);
     [[noreturn]] void run();
     void close();
 
