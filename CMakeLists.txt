@@ -15,6 +15,9 @@ set(COMMON_SOURCES
 
         src/impress/server/server.cpp src/impress/server/server.h
         src/impress/server/connection.cpp src/impress/server/connection.h
+        src/impress/server/router.cpp src/impress/server/router.h
+        src/impress/http/response.cpp src/impress/http/response.h
+        src/impress/http/headers.cpp src/impress/http/headers.h
 )
 
 add_library(impress_http STATIC ${COMMON_SOURCES})

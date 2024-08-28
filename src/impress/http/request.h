@@ -3,10 +3,9 @@
 #include <string>
 #include "./method.h"
 #include "./path.h"
+#include "./headers.h"
 
 #define CRLF "\r\n"
-
-typedef std::map<std::string, std::string> Headers;
 
 
 class Request {
@@ -29,12 +28,11 @@ public:
     const std::string &version() const;
     const std::string &body() const;
     void set_body(const std::string &body);
-    const std::map<std::string, std::string> &headers() const;
+    const Headers &headers() const;
     const std::string &get_header(const std::string &key) const;
     std::string to_string() const;
     static Request from_string(const std::string &raw);
 
 private:
     static void parse_request_line(const std::string &line, Method &method, std::string &path, std::string &version);
-    static Headers parse_headers(const std::string &raw_header);
 };
