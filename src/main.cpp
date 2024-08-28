@@ -1,6 +1,8 @@
 #include <iostream>
 #include <impress.h>
 
+#define APP_ROUTE(server, method, path, handler) server.router().add_route(Method::method, path, handler)
+
 using namespace std;
 
 const string EXAMPLE_REQUEST = "GET /index.html?param1=1&param2=2 HTTP/1.1\r\n"
@@ -8,31 +10,34 @@ const string EXAMPLE_REQUEST = "GET /index.html?param1=1&param2=2 HTTP/1.1\r\n"
                                "User-Agent: curl/7.68.0\r\n"
                                "Accept: */*\r\n\r\n";
 
-Response hello_world(const Request &request);
+Response hello_world(const Request &_) {
+    return {Status::OK_200, "Hello, World!"};
+}
+
+
+Server build_server() {
+    auto logger = StreamLogger(cout, DEBUG_LVL);
+
+    Server app("127.0.0.1", 8080, logger);
+    APP_ROUTE(app, GET, "/index.html", hello_world);
+
+    return app;
+}
+
 
 int main() {
     cout << "Hello, World!" << endl;
     cout << IMPRESS_VERSION << endl;
 
-    auto logger = StreamLogger(cout, DEBUG_LVL);
-    logger.info("Hello, Logger!");
-
-//    Server server("127.0.0.1", 8080, logger);
+    Server app = build_server();
 //    server.run();
 
-    auto request = Request::from_string(EXAMPLE_REQUEST);
-
+    Request request = Request::from_string(EXAMPLE_REQUEST);
     cout << request.to_string() << endl;
 
-    Router router;
-    router.add_route(Method::GET, "/*", hello_world);
-
-    auto response = router.handle_request(request);
+    Response response = app.router().handle_request(request);
     cout << response.to_string() << endl;
 
     return 0;
-}
 
-Response hello_world(const Request &request) {
-    return {Status::OK_200, "Hello, World!"};
 }

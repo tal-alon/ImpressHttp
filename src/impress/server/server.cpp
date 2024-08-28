@@ -27,6 +27,10 @@ Server::~Server() {
     close();
 }
 
+Router &Server::router() {
+    return m_router;
+}
+
 void Server::set_router(Router router) {
     m_router = std::move(router);
 }

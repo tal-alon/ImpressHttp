@@ -27,6 +27,7 @@ class Server {
 public:
     Server(std::string ip, int port, Logger &logger);
     ~Server();
+    Router &router();
     void set_router(Router router);
     [[noreturn]] void run();
     void close();
