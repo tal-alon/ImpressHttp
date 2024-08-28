@@ -16,6 +16,8 @@ public:
             Status status,
             Headers headers,
             std::string body);
+    Response(Status status);
+    Response(Status status, std::string body);
     const std::string &version() const;
     Status status() const;
     const Headers &headers() const;
