@@ -41,7 +41,7 @@ Server build_server() {
 
 int main() {
     cout << "Hello, World!" << endl;
-    cout << IMPRESS_VERSION << endl;
+    cout << "Impress Version: " << IMPRESS_VERSION << endl;
 
     Server app = build_server();
 //    app.run();
