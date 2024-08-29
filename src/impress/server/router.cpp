@@ -1,10 +1,18 @@
 #include "router.h"
 
 #include <regex>
+#include <iostream>
 
 using namespace std;
 
 void Router::add_route(Method method, const string &url, RouteHandler handler) {
+    try {
+        regex path_regex(url);
+    } catch (exception &e) {
+        cerr << "Invalid regex: " << url << endl;
+        cerr << e.what() << endl;
+        throw e;
+    }
     m_routes[make_tuple(method, url)] = handler;
 }
 
@@ -25,8 +33,13 @@ RouteHandler Router::get_handler(const Request &request) {
         if (route_method != request.method()) {
             continue;
         }
-        regex path_regex(route_path);
-        if (!regex_match(request.path().url(), path_regex)) {
+        try {
+            regex path_regex(route_path);
+            if (!regex_match(request.path().url(), path_regex)) {
+                continue;
+            }
+        } catch (exception &e) {
+            // if the regex is invalid, skip this route
             continue;
         }
         return route.second;
