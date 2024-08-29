@@ -13,8 +13,8 @@ Request::Request(
 
 Method Request::method() const { return m_method; }
 const Path &Request::path() const { return m_path; }
-const std::string &Request::get_query_param(const string &key) const {
-    return m_path.get_param(key);
+const QueryParams &Request::query_params() const {
+    return m_path.params();
 }
 const string &Request::version() const { return m_version; }
 const string &Request::body() const { return m_body; }

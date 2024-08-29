@@ -1,5 +1,6 @@
-#include <iostream>
 #include <impress.h>
+#include <iostream>
+#include <sstream>
 
 #define APP_ROUTE(server, method, path, handler) server.router().add_route(method, path, handler)
 
@@ -10,8 +11,20 @@ const string EXAMPLE_REQUEST = "GET /index.html?param1=1&param2=2 HTTP/1.1\r\n"
                                "User-Agent: curl/7.68.0\r\n"
                                "Accept: */*\r\n\r\n";
 
-Response hello_world(const Request &_) {
-    return {Status::OK_200, "Hello, World!"};
+Response hello_world(const Request &req) {
+    stringstream ss("");
+
+    ss << "Hello, World!" << endl;
+    ss << "got header: " << endl;
+    for (auto &header : req.headers().map()) {
+        ss <<  "\t" << header.first << ": " << header.second << endl;
+    }
+    ss << "got params: " << endl;
+    for (auto &param : req.query_params()) {
+        ss << "\t" << param.first << ": " << param.second << endl;
+    }
+
+    return {Status::OK_200, ss.str()};
 }
 
 
