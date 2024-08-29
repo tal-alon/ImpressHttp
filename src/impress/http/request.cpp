@@ -21,7 +21,7 @@ const string &Request::body() const { return m_body; }
 void Request::set_body(const string &body) { m_body = body; }
 const Headers &Request::headers() const { return m_headers; }
 const std::string &Request::get_header(const string &key) const {
-    return m_headers.get(key);
+    return m_headers[key];
 }
 string Request::to_string() const {
     return m_method + " " + m_path.to_string() + " " + m_version + CRLF;

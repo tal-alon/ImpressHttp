@@ -16,7 +16,7 @@ Response hello_world(const Request &req) {
 
     ss << "Hello, World!" << endl;
     ss << "got header: " << endl;
-    for (auto &header : req.headers().map()) {
+    for (auto &header : req.headers()) {
         ss <<  "\t" << header.first << ": " << header.second << endl;
     }
     ss << "got params: " << endl;
@@ -44,13 +44,13 @@ int main() {
     cout << IMPRESS_VERSION << endl;
 
     Server app = build_server();
-    app.run();
+//    app.run();
 
-//    Request request = Request::from_string(EXAMPLE_REQUEST);
-//    cout << request.to_string() << endl;
-//
-//    Response response = app.router().handle_request(request);
-//    cout << response.to_string() << endl;
+    Request request = Request::from_string(EXAMPLE_REQUEST);
+    cout << request.to_string() << endl;
+
+    Response response = app.router().handle_request(request);
+    cout << response.to_string() << endl;
 
     return 0;
 

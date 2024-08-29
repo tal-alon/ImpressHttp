@@ -10,9 +10,11 @@ class Headers {
 public:
     Headers();
     explicit Headers(const std::map<std::string, std::string> &headers);
-    void set(const std::string &key, const std::string &value);
-    const std::string &get(const std::string &key) const;
-    const std::map<std::string, std::string> &map() const;
+    bool has(const std::string &key) const;
+    std::string &operator[](const std::string &key);
+    const std::string &operator[](const std::string &key) const;
     std::string to_string() const;
     static Headers from_string(const std::string &raw);
+    std::map<std::string, std::string>::const_iterator begin() const;
+    std::map<std::string, std::string>::const_iterator end() const;
 };

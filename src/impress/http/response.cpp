@@ -18,7 +18,7 @@ void Response::set_body(const string &body) { m_body = body; }
 
 std::string Response::to_string() const {
     string response = m_version + " " + status_to_string(m_status) + "\r\n";
-    for (auto &header : m_headers.map()) {
+    for (auto &header : m_headers) {
         response += header.first + ": " + header.second + "\r\n";
     }
     response += "\r\n";
