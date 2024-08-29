@@ -2,7 +2,7 @@
 #include <iostream>
 #include <sstream>
 
-#define APP_ROUTE(server, method, path, handler) server.router().add_route(method, path, handler)
+#define APP_ROUTE(server, methods, path, handler) server.router().add_route(methods, path, handler)
 
 using namespace std;
 
@@ -33,7 +33,7 @@ Server build_server() {
     logger->info("Building server...");
 
     Server app("127.0.0.1", 12345, *logger);
-    APP_ROUTE(app, HTTP_GET, ".+", hello_world);
+    APP_ROUTE(app, {HTTP_GET}, ".+", hello_world);
 
     return app;
 }

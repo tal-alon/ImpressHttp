@@ -5,7 +5,7 @@
 
 using namespace std;
 
-void Router::add_route(Method method, const string &url, RouteHandler handler) {
+void Router::add_route(std::set<Method> methods, const string &url, RouteHandler handler) {
     try {
         regex path_regex(url);
     } catch (exception &e) {
@@ -13,7 +13,7 @@ void Router::add_route(Method method, const string &url, RouteHandler handler) {
         cerr << e.what() << endl;
         throw e;
     }
-    m_routes[make_tuple(method, url)] = handler;
+    m_routes[make_tuple(methods, url)] = handler;
 }
 
 Response Router::handle_request(const Request &request) {
@@ -27,21 +27,17 @@ Response Router::handle_request(const Request &request) {
 RouteHandler Router::get_handler(const Request &request) {
     // loop through all routes and check if the method match and the path is a regex match to the route
     for (auto &route : m_routes) {
-        Method route_method;
+        set<Method> route_methods;
         string route_path;
-        tie(route_method, route_path) = route.first;
-        if (route_method != request.method()) {
-            continue;
+        tie(route_methods, route_path) = route.first;
+        if (route_methods.find(request.method()) == route_methods.end()) {
+            continue; // method does not match
         }
-        try {
-            regex path_regex(route_path);
-            if (!regex_match(request.path().url(), path_regex)) {
-                continue;
-            }
-        } catch (exception &e) {
-            // if the regex is invalid, skip this route
-            continue;
+        regex path_regex(route_path);
+        if (!regex_match(request.path().url(), path_regex)) {
+            continue; // path does not match
         }
+
         return route.second;
     }
     return nullptr;
