@@ -6,7 +6,7 @@ using namespace std;
 
 Headers::Headers() = default;
 
-Headers::Headers(const map<string, string> &headers) : m_headers(headers) {}
+Headers::Headers(const ::map<string, string> &headers) : m_headers(headers) {}
 
 void Headers::set(const string &key, const string &value) {
     m_headers[key] = value;
@@ -18,6 +18,10 @@ const std::string &Headers::get(const string &key) const {
         throw invalid_argument("Header not found: " + key);
     }
     return it->second;
+}
+
+const std::map<std::string, std::string> &Headers::map() const {
+    return m_headers;
 }
 
 string Headers::to_string() const {

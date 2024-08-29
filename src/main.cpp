@@ -1,7 +1,7 @@
 #include <iostream>
 #include <impress.h>
 
-#define APP_ROUTE(server, method, path, handler) server.router().add_route(Method::method, path, handler)
+#define APP_ROUTE(server, method, path, handler) server.router().add_route(method, path, handler)
 
 using namespace std;
 
@@ -19,7 +19,7 @@ Server build_server() {
     auto logger = StreamLogger(cout, DEBUG_LVL);
 
     Server app("127.0.0.1", 8080, logger);
-    APP_ROUTE(app, GET, "/index.html", hello_world);
+    APP_ROUTE(app, HTTP_GET, "/index.html", hello_world);
 
     return app;
 }

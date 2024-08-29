@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD 14)
 set(COMMON_SOURCES
         src/impress/impress.h
         src/impress/http/request.cpp src/impress/http/request.h
-        src/impress/http/method.cpp src/impress/http/method.h
+        src/impress/http/method.h
         src/impress/http/status.cpp src/impress/http/status.h
         src/impress/http/path.cpp src/impress/http/path.h
 

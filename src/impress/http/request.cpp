@@ -1,5 +1,6 @@
 #include "request.h"
 #include <sstream>
+#include <utility>
 
 using namespace std;
 
@@ -8,7 +9,7 @@ Request::Request(
         Path &path,
         string &version,
         string &body,
-        Headers &headers) : m_method(method), m_path(path), m_version(version), m_body(body), m_headers(headers) {}
+        Headers &headers) : m_method(std::move(method)), m_path(path), m_version(version), m_body(body), m_headers(headers) {}
 
 Method Request::method() const { return m_method; }
 const Path &Request::path() const { return m_path; }
@@ -23,7 +24,7 @@ const std::string &Request::get_header(const string &key) const {
     return m_headers.get(key);
 }
 string Request::to_string() const {
-    return method_to_string(m_method) + " " + m_path.to_string() + " " + m_version + CRLF;
+    return m_method + " " + m_path.to_string() + " " + m_version + CRLF;
 }
 
 Request Request::from_string(const string &raw) {
@@ -47,8 +48,5 @@ Request Request::from_string(const string &raw) {
 // TODO - parse query params from path
 void Request::parse_request_line(const string &line, Method &method, string &path, string &version) {
     istringstream stream(line);
-    string method_str;
-
-    stream >> method_str >> path >> version;
-    method = str_to_method(method_str);
+    stream >> method >> path >> version;
 }

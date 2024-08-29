@@ -1,26 +1,14 @@
 #pragma once
-#include <map>
 #include <string>
 
 
-enum class Method {
-    GET,
-    POST,
-    PUT,
-    DELETE,
-    HEAD,
-    OPTIONS,
-    TRACE
-};
+typedef std::string Method;
 
-const std::map<std::string, Method> HTTP_METHODS = {
-        {"GET", Method::GET},
-        {"POST", Method::POST},
-        {"PUT", Method::PUT},
-        {"DELETE", Method::DELETE},
-        {"HEAD", Method::HEAD},
-        {"OPTIONS", Method::OPTIONS},
-        {"TRACE", Method::TRACE}};
-
-Method str_to_method(const std::string &method_str);
-std::string method_to_string(Method method);
+#define HTTP_GET Method {"GET"}
+#define HTTP_POST Method {"POST"}
+#define HTTP_PUT Method {"PUT"}
+#define HTTP_DELETE Method {"DELETE"}
+#define HTTP_PATCH Method {"PATCH"}
+#define HTTP_OPTIONS Method {"OPTIONS"}
+#define HTTP_HEAD Method {"HEAD"}
+#define HTTP_TRACE Method {"TRACE"}
