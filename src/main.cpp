@@ -29,9 +29,10 @@ Response hello_world(const Request &req) {
 
 
 Server build_server() {
-    auto logger = StreamLogger(cout, DEBUG_LVL);
+    auto logger = new StreamLogger(cout, DEBUG_LVL);
+    logger->info("Building server...");
 
-    Server app("127.0.0.1", 8080, logger);
+    Server app("127.0.0.1", 12345, *logger);
     APP_ROUTE(app, HTTP_GET, ".+", hello_world);
 
     return app;
@@ -43,13 +44,13 @@ int main() {
     cout << IMPRESS_VERSION << endl;
 
     Server app = build_server();
-//    server.run();
+    app.run();
 
-    Request request = Request::from_string(EXAMPLE_REQUEST);
-    cout << request.to_string() << endl;
-
-    Response response = app.router().handle_request(request);
-    cout << response.to_string() << endl;
+//    Request request = Request::from_string(EXAMPLE_REQUEST);
+//    cout << request.to_string() << endl;
+//
+//    Response response = app.router().handle_request(request);
+//    cout << response.to_string() << endl;
 
     return 0;
 

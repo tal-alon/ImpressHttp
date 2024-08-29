@@ -97,7 +97,7 @@ void Server::accept_new_connection() {
             "Accepted new connection, socket=" + to_string(client_socket) +
             ", client_count=" + to_string(m_client_count)
             );
-    m_connections[m_client_count] = new Connection(client_socket, ReceiveStatus::RECEIVE, SendStatus::IDLE, m_logger);
+    m_connections[m_client_count] = new Connection(client_socket, SendStatus::IDLE, m_logger);
     m_client_count++;
 }
 
@@ -118,7 +118,6 @@ void Server::handle_recv_and_send() {
         accept_new_connection();
     }
 
-    // TODO - change this behavior
     for (int i = 0; i < m_client_count && 0 < n_ready; i++) {
         if (FD_ISSET(m_connections[i]->sock_id(), &m_wait_recv)) {
             m_connections[i]->receive();
@@ -127,13 +126,18 @@ void Server::handle_recv_and_send() {
     }
     for (int i = 0; i < m_client_count && 0 < n_ready; i++) {
         if (FD_ISSET(m_connections[i]->sock_id(), &m_wait_send)) {
-            m_connections[i]->send("Hello, client!", 14);
+            handle_completed_request(i);
             n_ready--;
         }
     }
+    check_for_completed_requests();
 }
+
 void Server::check_for_completed_requests() {
     for (int i = 0; i < m_client_count; i++) {
+        if (m_connections[i]->get_waiting_request() != nullptr) {
+            continue;
+        }
         if (m_connections[i]->get_buffer_size() == 0) {
             continue;
         }
@@ -142,12 +146,26 @@ void Server::check_for_completed_requests() {
             continue;
         }
         m_logger.info("Received request, socket=" + to_string(m_connections[i]->sock_id()));
-        auto http_request = Request::from_string(request);
-        m_logger.info("Parsed request: + " + http_request.to_string());
-        handle_request(http_request, *m_connections[i]);
+        auto http_request = new Request(Request::from_string(request));
+        m_logger.info("Parsed request: + " + http_request->to_string());
+        m_connections[i]->set_waiting_request(http_request);
+        auto content_length = atoi(http_request->get_header("Content-Length").c_str());
+        if (content_length != 0) {
+            auto body = m_connections[i]->try_pull_bytes(content_length);
+            if (body != nullptr) {
+                http_request->set_body(body);
+            }
+        }
+        m_connections[i]->set_send_status(SendStatus::SEND);
     }
 }
-void Server::handle_request(Request &request, Connection &connection) {
-    m_logger.info("Handling request: " + request.to_string());
-    // TODO - update the connection buffer and status
+void Server::handle_completed_request(int connection_index) {
+    Connection &connection = *m_connections[connection_index];
+    auto request = connection.get_waiting_request();
+    auto response = m_router.handle_request(*request);
+    auto res_string = response.to_string();
+    auto buffer = res_string.c_str();
+    auto buffer_size = (int) res_string.size();
+    connection.send(buffer, buffer_size);
+    connection.clear_waiting_request();
 }

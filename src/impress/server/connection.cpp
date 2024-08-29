@@ -5,21 +5,13 @@ using namespace std;
 
 Connection::Connection(
         SOCKET socket,
-        ReceiveStatus receive,
         SendStatus send,
-        Logger &logger) : m_socket(socket), m_receive(receive), m_send(send), m_logger(logger) {}
+        Logger &logger) : m_socket(socket), m_send(send), m_logger(logger) {}
 
-Connection::~Connection() {
-    close();
-}
-
-SOCKET Connection::sock_id() const {
-    return m_socket;
-}
-
-SendStatus Connection::send_status() const {
-    return m_send;
-}
+Connection::~Connection() { close(); }
+SOCKET Connection::sock_id() const { return m_socket; }
+SendStatus Connection::send_status() const { return m_send; }
+void Connection::set_send_status(SendStatus status) { m_send = status; }
 
 SOCKET Connection::accept() {
     if (m_closed) {
@@ -71,6 +63,13 @@ void Connection::send(const char *data, int size) {
         return;
     }
     m_logger.info("Sent " + to_string(bytes_sent) + " bytes, socket=" + to_string(m_socket));
+}
+
+void Connection::set_waiting_request(Request *request) { m_waiting_request = request; }
+Request *Connection::get_waiting_request() { return m_waiting_request; }
+void Connection::clear_waiting_request() {
+    delete m_waiting_request;
+    m_waiting_request = nullptr;
 }
 
 char const *Connection::get_buffer() const {

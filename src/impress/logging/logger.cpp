@@ -62,7 +62,7 @@ void Logger::_log(LogLevel level, const string &message) {
            << level_to_string(level) << ": "
 
            // message:
-           << message << endl;
+           << message;
 
     write(stream.str());
 }
