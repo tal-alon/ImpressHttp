@@ -14,7 +14,7 @@ const int MAX_CONNECTIONS = 10;
 
 class Server {
     Router m_router;
-    Logger &m_logger;
+    Logger *m_logger;
     std::string m_ip;
     int m_port;
     sockaddr_in m_address;
@@ -22,13 +22,14 @@ class Server {
     Connection *m_connections[MAX_CONNECTIONS];
     fd_set m_wait_recv, m_wait_send;
     int m_client_count = 0;
-    bool m_closed = false;//TODO - check if any bad stuff happens if we close the server twice
 
 public:
-    Server(std::string ip, int port, Logger &logger);
+    Server(std::string ip, int port, Logger *logger);
+    Server(std::string ip, int port);
     ~Server();
     Router &router();
     void set_router(Router router);
+    void set_logger(Logger *logger);
     [[noreturn]] void run();
 
 private:

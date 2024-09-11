@@ -16,7 +16,7 @@ enum class SendStatus {
 
 class Connection {
     SOCKET m_socket;
-    Logger &m_logger;
+    Logger *m_logger;
     SendStatus m_send = SendStatus::IDLE;
     char m_buffer[CONNECTION_BUFFER_SIZE] = {};
     int m_buffer_size = 0;
@@ -24,7 +24,7 @@ class Connection {
     bool m_closed = false;
 
 public:
-    Connection(SOCKET socket, SendStatus send, Logger &logger);
+    Connection(SOCKET socket, SendStatus send, Logger *logger);
     ~Connection();
     SOCKET sock_id() const;
     SendStatus send_status() const;

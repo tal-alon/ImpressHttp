@@ -6,31 +6,34 @@ using namespace std;
 Connection::Connection(
         SOCKET socket,
         SendStatus send,
-        Logger &logger) : m_socket(socket), m_send(send), m_logger(logger) {}
+        Logger *logger) : m_socket(socket), m_send(send), m_logger(logger) {}
 
-Connection::~Connection() { close(); }
+Connection::~Connection() {
+    delete m_logger;
+    close();
+}
 SOCKET Connection::sock_id() const { return m_socket; }
 SendStatus Connection::send_status() const { return m_send; }
 void Connection::set_send_status(SendStatus status) { m_send = status; }
 
 SOCKET Connection::accept() {
     if (m_closed) {
-        m_logger.error("Attempted to accept on a closed socket, socket=" + to_string(m_socket));
+        m_logger->error("Attempted to accept on a closed socket, socket=" + to_string(m_socket));
         return INVALID_SOCKET;
     }
     SOCKET client_socket = ::accept(m_socket, nullptr, nullptr);
     if (client_socket == INVALID_SOCKET) {
-        m_logger.error("Failed to accept connection, socket=" + to_string(m_socket));
+        m_logger->error("Failed to accept connection, socket=" + to_string(m_socket));
         close(true);
         return INVALID_SOCKET;
     }
-    m_logger.info("Accepted new connection, socket=" + to_string(client_socket));
+    m_logger->info("Accepted new connection, socket=" + to_string(client_socket));
     return client_socket;
 }
 
 void Connection::receive() {
     if (m_closed) {
-        m_logger.error("Attempted to receive on a closed socket, socket=" + to_string(m_socket));
+        m_logger->error("Attempted to receive on a closed socket, socket=" + to_string(m_socket));
         return;
     }
 
@@ -38,31 +41,31 @@ void Connection::receive() {
     int buffer_size = CONNECTION_BUFFER_SIZE - m_buffer_size;
     int bytes_recv = recv(m_socket, buffer, buffer_size, 0);
     if (bytes_recv == 0) {
-        m_logger.info("Received an empty segment, socket=" + to_string(m_socket));
+        m_logger->info("Received an empty segment, socket=" + to_string(m_socket));
         close();
         return;
     }
     if (bytes_recv == SOCKET_ERROR) {
-        m_logger.error("Failed to receive data, socket=" + to_string(m_socket));
+        m_logger->error("Failed to receive data, socket=" + to_string(m_socket));
         close(true);
         return;
     }
     m_buffer_size += bytes_recv;
-    m_logger.info("Received " + to_string(bytes_recv) + " bytes, socket=" + to_string(m_socket));
+    m_logger->info("Received " + to_string(bytes_recv) + " bytes, socket=" + to_string(m_socket));
 }
 
 void Connection::send(const char *data, int size) {
     if (m_closed) {
-        m_logger.error("Attempted to send on a closed socket, socket=" + to_string(m_socket));
+        m_logger->error("Attempted to send on a closed socket, socket=" + to_string(m_socket));
         return;
     }
     int bytes_sent = ::send(m_socket, data, size, 0);
     if (bytes_sent == SOCKET_ERROR) {
-        m_logger.error("Failed to send data, socket=" + to_string(m_socket));
+        m_logger->error("Failed to send data, socket=" + to_string(m_socket));
         close(true);
         return;
     }
-    m_logger.info("Sent " + to_string(bytes_sent) + " bytes, socket=" + to_string(m_socket));
+    m_logger->info("Sent " + to_string(bytes_sent) + " bytes, socket=" + to_string(m_socket));
 }
 
 void Connection::set_waiting_request(Request *request) { m_waiting_request = request; }
@@ -97,14 +100,14 @@ char *Connection::try_pull_bytes(int size) {
 
 void Connection::close(bool force) {
     if (m_closed) {
-        m_logger.info("Connection already closed, socket=" + to_string(m_socket));
+        m_logger->info("Connection already closed, socket=" + to_string(m_socket));
         return;
     }
     if (!force) {
-        m_logger.info("Closing connection, socket=" + to_string(m_socket));
+        m_logger->info("Closing connection, socket=" + to_string(m_socket));
     } else {
         int error = WSAGetLastError();
-        m_logger.warn(
+        m_logger->warn(
                 "Forcing close connection, socket=" + to_string(m_socket) +
                 ", error=" + to_string(error));
     }

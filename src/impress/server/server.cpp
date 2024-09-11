@@ -2,22 +2,28 @@
 
 #include <utility>
 
+#include "../logging/dummy_logger.h"
+
 #define _WINSOCK_DEPRECATED_NO_WARNINGS
 using namespace std;
 
-Server::Server(string ip, int port, Logger &logger) :
+Server::Server(string ip, int port, Logger *logger) :
         m_ip(std::move(ip)),
         m_port(port),
-        m_logger(logger),
         m_listen_sock(AF_INET, SOCK_STREAM, IPPROTO_TCP) {
 
     // Initialize the address
     m_address.sin_family = AF_INET;
     m_address.sin_port = htons(m_port);
     m_address.sin_addr.s_addr = inet_addr(m_ip.c_str());
+
+    set_logger(logger);
 }
 
+Server::Server(std::string ip, int port) : Server(std::move(ip), port, new DummyLogger()) {}
+
 Server::~Server() {
+    delete m_logger;
     for (int i = 0; i < m_client_count; i++) {
         delete m_connections[i];
     }
@@ -31,8 +37,16 @@ void Server::set_router(Router router) {
     m_router = std::move(router);
 }
 
+void Server::set_logger(Logger *logger) {
+    if (logger == nullptr) {
+        m_logger = new DummyLogger();
+    } else {
+        m_logger = logger;
+    }
+}
+
 void Server::run() {
-    m_logger.info("Server is running on " + m_ip + ":" + to_string(m_port));
+    m_logger->info("Server is running on " + m_ip + ":" + to_string(m_port));
     bind_socket();
 
     while (true) {
@@ -51,7 +65,7 @@ void Server::bind_socket() {
 
 void Server::exit_with_error(const string &message) {
     int error_code = WSAGetLastError();
-    m_logger.error(message + " " + to_string(error_code));
+    m_logger->error(message + " " + to_string(error_code));
 
     exit(EXIT_FAILURE);
 }
@@ -69,7 +83,7 @@ void Server::update_fd_sets() {
 
 void Server::accept_new_connection() {
     if (MAX_CONNECTIONS <= m_client_count) {
-        m_logger.warn("Max number of connections reached, closing new connection");
+        m_logger->warn("Max number of connections reached, closing new connection");
         return;
     }
     SOCKET client_socket = accept(m_listen_sock.descriptor(), nullptr, nullptr);
@@ -77,7 +91,7 @@ void Server::accept_new_connection() {
         exit_with_error("Error at accept()");
     }
 
-    m_logger.info(
+    m_logger->info(
             "Accepted new connection, socket=" + to_string(client_socket) +
             ", client_count=" + to_string(m_client_count));
     m_connections[m_client_count] = new Connection(client_socket, SendStatus::IDLE, m_logger);
@@ -85,7 +99,7 @@ void Server::accept_new_connection() {
 }
 
 void Server::remove_connection(int index) {
-    m_logger.info("Removing connection, socket=" + to_string(m_connections[index]->sock_id()));
+    m_logger->info("Removing connection, socket=" + to_string(m_connections[index]->sock_id()));
     delete m_connections[index];
     m_connections[index] = m_connections[m_client_count - 1];
     m_client_count--;
@@ -128,9 +142,9 @@ void Server::check_for_completed_requests() {
         if (request == nullptr) {
             continue;
         }
-        m_logger.info("Received request, socket=" + to_string(m_connections[i]->sock_id()));
+        m_logger->info("Received request, socket=" + to_string(m_connections[i]->sock_id()));
         auto http_request = new Request(Request::from_string(request));
-        m_logger.info("Parsed request: + " + http_request->to_string());
+        m_logger->info("Parsed request: + " + http_request->to_string());
         m_connections[i]->set_waiting_request(http_request);
         auto content_length = atoi(http_request->get_header("Content-Length").c_str());
         if (content_length != 0) {
