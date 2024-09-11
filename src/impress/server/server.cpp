@@ -71,6 +71,9 @@ void Server::exit_with_error(const string &message) {
 void Server::update_fd_sets() {
     FD_ZERO(&m_wait_recv);
     FD_ZERO(&m_wait_send);
+
+    FD_SET(m_listen_sock.descriptor(), &m_wait_recv);
+
     for (int i = 0; i < m_client_count; i++) {
         FD_SET(m_connections[i]->sock_id(), &m_wait_recv);
         if (m_connections[i]->send_status() == SendStatus::SEND) {
