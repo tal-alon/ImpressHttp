@@ -9,7 +9,7 @@ class Socket {
 public:
     Socket(int af, int type, int protocol);
     ~Socket();
-    SOCKET getSocket() const;
+    SOCKET descriptor() const;
 };
 
 

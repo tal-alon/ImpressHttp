@@ -15,6 +15,6 @@ Socket::~Socket() {
     closesocket(this->connSocket);
 }
 
-SOCKET Socket::getSocket() const {
+SOCKET Socket::descriptor() const {
     return this->connSocket;
 }
