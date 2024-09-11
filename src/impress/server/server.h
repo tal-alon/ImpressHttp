@@ -1,7 +1,6 @@
 #pragma once
 #include <WinSock2.h>
 #include <string>
-#pragma comment(lib, "Ws2_32.lib")
 
 #include "../http/request.h"
 #include "../logging/logger.h"

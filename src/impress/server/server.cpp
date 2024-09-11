@@ -1,7 +1,5 @@
 #include "server.h"
 
-#include <utility>
-
 #include "../logging/dummy_logger.h"
 
 #define _WINSOCK_DEPRECATED_NO_WARNINGS
