@@ -11,6 +11,7 @@
 #include "socket/wsa_initializer.h"
 
 #include "logging/logger.h"
+#include "logging/dummy_logger.h"
 #include "logging/stream_logger.h"
 
 #include "server/connection.h"

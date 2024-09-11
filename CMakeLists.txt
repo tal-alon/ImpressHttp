@@ -11,6 +11,7 @@ set(COMMON_SOURCES
         src/impress/http/path.cpp src/impress/http/path.h
 
         src/impress/logging/logger.cpp src/impress/logging/logger.h
+        src/impress/logging/dummy_logger.h
         src/impress/logging/stream_logger.cpp src/impress/logging/stream_logger.h
 
         src/impress/server/server.cpp src/impress/server/server.h
@@ -19,12 +20,9 @@ set(COMMON_SOURCES
         src/impress/http/response.cpp src/impress/http/response.h
         src/impress/http/headers.cpp src/impress/http/headers.h
 
-        src/impress/socket/wsa_initializer.cpp
-        src/impress/socket/wsa_initializer.h
-        src/impress/socket/socket.cpp
-        src/impress/socket/socket.h
-        src/impress/socket/socket_error.cpp
-        src/impress/socket/socket_error.h
+        src/impress/socket/wsa_initializer.cpp src/impress/socket/wsa_initializer.h
+        src/impress/socket/socket.cpp src/impress/socket/socket.h
+        src/impress/socket/socket_error.cpp src/impress/socket/socket_error.h
 )
 
 add_library(impress_http STATIC ${COMMON_SOURCES})
