@@ -40,17 +40,28 @@ Server build_server() {
 
 
 int main() {
+//    WSAData wsaData;
+//    if (NO_ERROR != WSAStartup(MAKEWORD(2, 2), &wsaData)) {
+//        throw std::exception("Error at WSAStartup()");
+//    }
+    WSAInitializer wsaInitializer;
+
+    socket(AF_INET, SOCK_STREAM, 0);
+
     cout << "Impress Version: " << IMPRESS_VERSION << endl;
 
     Server app = build_server();
-//    app.run();
+    app.run();
 
-    Request request = Request::from_string(EXAMPLE_REQUEST);
-    cout << request.to_string() << endl;
+//    Request request = Request::from_string(EXAMPLE_REQUEST);
+//    cout << request.to_string() << endl;
+//
+//    Response response = app.router().handle_request(request);
+//    cout << response.to_string() << endl;
 
-    Response response = app.router().handle_request(request);
-    cout << response.to_string() << endl;
 
+    cout << "Cleaning up WSA" << endl;
+
+//    WSACleanup();
     return 0;
-
 }

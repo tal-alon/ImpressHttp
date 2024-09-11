@@ -18,6 +18,8 @@ set(COMMON_SOURCES
         src/impress/server/router.cpp src/impress/server/router.h
         src/impress/http/response.cpp src/impress/http/response.h
         src/impress/http/headers.cpp src/impress/http/headers.h
+        src/impress/init/wsa_initializer.cpp
+        src/impress/init/wsa_initializer.h
 )
 
 add_library(impress_http STATIC ${COMMON_SOURCES})

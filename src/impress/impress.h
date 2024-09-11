@@ -6,6 +6,8 @@
 #include "http/response.h"
 #include "http/status.h"
 
+#include "init/wsa_initializer.h"
+
 #include "logging/logger.h"
 #include "logging/stream_logger.h"
 

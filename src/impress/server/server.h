@@ -14,7 +14,6 @@ const int MAX_CONNECTIONS = 10;
 class Server {
     Router m_router;
     Logger &m_logger;
-    WSAData m_wsaData;
     std::string m_ip;
     int m_port;
     sockaddr_in m_address;

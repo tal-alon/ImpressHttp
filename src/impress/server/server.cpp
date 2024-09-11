@@ -11,11 +11,6 @@ Server::Server(string ip, int port, Logger &logger) : m_ip(std::move(ip)), m_por
     m_address.sin_port = htons(m_port);
     m_address.sin_addr.s_addr = inet_addr(m_ip.c_str());
 
-    // Initialize the Winsock library
-    if (NO_ERROR != WSAStartup(MAKEWORD(2, 2), &m_wsaData)) {
-        exit_with_error("Error at WSAStartup()");
-    }
-
     // Create the listening socket
     m_listen_sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
     if (INVALID_SOCKET == m_listen_sock) {
@@ -53,7 +48,6 @@ void Server::close() {
     }
     m_closed = true;
     closesocket(m_listen_sock);
-    WSACleanup();
 }
 
 
