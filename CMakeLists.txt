@@ -18,8 +18,11 @@ set(COMMON_SOURCES
         src/impress/server/router.cpp src/impress/server/router.h
         src/impress/http/response.cpp src/impress/http/response.h
         src/impress/http/headers.cpp src/impress/http/headers.h
+
         src/impress/socket/wsa_initializer.cpp
         src/impress/socket/wsa_initializer.h
+        src/impress/socket/socket.cpp
+        src/impress/socket/socket.h
         src/impress/socket/socket_error.cpp
         src/impress/socket/socket_error.h
 )

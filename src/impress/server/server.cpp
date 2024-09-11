@@ -5,21 +5,22 @@
 #define _WINSOCK_DEPRECATED_NO_WARNINGS
 using namespace std;
 
-Server::Server(string ip, int port, Logger &logger) : m_ip(std::move(ip)), m_port(port), m_logger(logger) {
+Server::Server(string ip, int port, Logger &logger) :
+        m_ip(std::move(ip)),
+        m_port(port),
+        m_logger(logger),
+        m_listen_sock(AF_INET, SOCK_STREAM, IPPROTO_TCP) {
+
     // Initialize the address
     m_address.sin_family = AF_INET;
     m_address.sin_port = htons(m_port);
     m_address.sin_addr.s_addr = inet_addr(m_ip.c_str());
-
-    // Create the listening socket
-    m_listen_sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-    if (INVALID_SOCKET == m_listen_sock) {
-        exit_with_error("Error at socket()");
-    }
 }
 
 Server::~Server() {
-    close();
+    for (int i = 0; i < m_client_count; i++) {
+        delete m_connections[i];
+    }
 }
 
 Router &Server::router() {
@@ -40,18 +41,10 @@ void Server::run() {
     }
 }
 
-void Server::close() {
-    // Check if the server is already closed
-    if (m_closed) {
-        return;
-    }
-    m_closed = true;
-    closesocket(m_listen_sock);
-}
-
 
 void Server::bind_socket() {
-    if (SOCKET_ERROR == bind(m_listen_sock, (sockaddr *) &m_address, sizeof(m_address))) {
+    SOCKET sock_id = m_listen_sock.descriptor();
+    if (SOCKET_ERROR == bind(sock_id, (sockaddr *) &m_address, sizeof(m_address))) {
         exit_with_error("Error at bind()");
     }
 }
@@ -60,7 +53,6 @@ void Server::exit_with_error(const string &message) {
     int error_code = WSAGetLastError();
     m_logger.error(message + " " + to_string(error_code));
 
-    close();
     exit(EXIT_FAILURE);
 }
 
@@ -80,8 +72,7 @@ void Server::accept_new_connection() {
         m_logger.warn("Max number of connections reached, closing new connection");
         return;
     }
-
-    SOCKET client_socket = accept(m_listen_sock, nullptr, nullptr);
+    SOCKET client_socket = accept(m_listen_sock.descriptor(), nullptr, nullptr);
     if (INVALID_SOCKET == client_socket) {
         exit_with_error("Error at accept()");
     }
@@ -106,7 +97,7 @@ void Server::handle_recv_and_send() {
         exit_with_error("Error at select()");
     }
 
-    if (FD_ISSET(m_listen_sock, &m_wait_recv)) {
+    if (FD_ISSET(m_listen_sock.descriptor(), &m_wait_recv)) {
         accept_new_connection();
     }
 

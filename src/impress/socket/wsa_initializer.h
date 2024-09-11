@@ -6,14 +6,14 @@
 #pragma comment(lib, "Ws2_32.lib")
 
 class WSAInitializer {
-    WSAData wsaData;
+    WSAData m_wsaData;
 
 public:
     WSAInitializer();
     ~WSAInitializer();
 
     const WSAData &getWSAData() const {
-        return this->wsaData;
+        return this->m_wsaData;
     }
 };
 

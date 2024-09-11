@@ -5,8 +5,9 @@
 
 #include "../http/request.h"
 #include "../logging/logger.h"
-#include "connection.h"
-#include "router.h"
+#include "../socket/socket.h"
+#include "./connection.h"
+#include "./router.h"
 
 
 const int MAX_CONNECTIONS = 10;
@@ -17,7 +18,7 @@ class Server {
     std::string m_ip;
     int m_port;
     sockaddr_in m_address;
-    SOCKET m_listen_sock;
+    Socket m_listen_sock;
     Connection *m_connections[MAX_CONNECTIONS];
     fd_set m_wait_recv, m_wait_send;
     int m_client_count = 0;
@@ -29,7 +30,6 @@ public:
     Router &router();
     void set_router(Router router);
     [[noreturn]] void run();
-    void close();
 
 private:
     void bind_socket();

@@ -3,7 +3,7 @@
 #include "./socket_error.h"
 
 WSAInitializer::WSAInitializer() {
-    if (NO_ERROR != WSAStartup(MAKEWORD(2, 2), &wsaData)) {
+    if (NO_ERROR != WSAStartup(MAKEWORD(2, 2), &m_wsaData)) {
         throw SocketError("Error at WSAStartup()");
     }
 }
