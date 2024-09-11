@@ -28,12 +28,12 @@ Response hello_world(const Request &req) {
 }
 
 
-Server build_server() {
+Server* build_server() {
     auto logger = new StreamLogger(cout, DEBUG_LVL);
     logger->info("Building server...");
 
-    Server app("127.0.0.1", 8000, *logger);
-    APP_ROUTE(app, {HTTP_GET}, ".+", hello_world);
+    auto app = new Server("127.0.0.1", 8000, logger);
+    APP_ROUTE((*app), {HTTP_GET}, ".+", hello_world);
 
     return app;
 }
@@ -43,8 +43,8 @@ int main() {
     WSAInitializer wsaInitializer;
     cout << "Impress Version: " << IMPRESS_VERSION << endl;
 
-    Server app = build_server();
-    app.run();
+    Server *app = build_server();
+    app->run();
 
 //    Request request = Request::from_string(EXAMPLE_REQUEST);
 //    cout << request.to_string() << endl;
