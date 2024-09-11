@@ -32,7 +32,7 @@ Server build_server() {
     auto logger = new StreamLogger(cout, DEBUG_LVL);
     logger->info("Building server...");
 
-    Server app("127.0.0.1", 12345, *logger);
+    Server app("127.0.0.1", 8000, *logger);
     APP_ROUTE(app, {HTTP_GET}, ".+", hello_world);
 
     return app;
@@ -41,9 +41,6 @@ Server build_server() {
 
 int main() {
     WSAInitializer wsaInitializer;
-
-    socket(AF_INET, SOCK_STREAM, 0);
-
     cout << "Impress Version: " << IMPRESS_VERSION << endl;
 
     Server app = build_server();
