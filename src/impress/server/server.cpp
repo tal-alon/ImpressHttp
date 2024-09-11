@@ -37,7 +37,6 @@ void Server::run() {
     while (true) {
         update_fd_sets();
         handle_recv_and_send();
-
     }
 }
 
@@ -89,8 +88,7 @@ void Server::accept_new_connection() {
 
     m_logger.info(
             "Accepted new connection, socket=" + to_string(client_socket) +
-            ", client_count=" + to_string(m_client_count)
-            );
+            ", client_count=" + to_string(m_client_count));
     m_connections[m_client_count] = new Connection(client_socket, SendStatus::IDLE, m_logger);
     m_client_count++;
 }

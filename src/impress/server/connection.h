@@ -1,9 +1,9 @@
 #pragma once
 
+#include "../http/request.h"
+#include "../logging/logger.h"
 #include <WinSock2.h>
 #include <string>
-#include "../logging/logger.h"
-#include "../http/request.h"
 
 constexpr int CONNECTION_BUFFER_SIZE = 4096;
 

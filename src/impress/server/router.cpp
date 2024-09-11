@@ -1,7 +1,7 @@
 #include "router.h"
 
-#include <regex>
 #include <iostream>
+#include <regex>
 
 using namespace std;
 
@@ -31,11 +31,11 @@ RouteHandler Router::get_handler(const Request &request) {
         string route_path;
         tie(route_methods, route_path) = route.first;
         if (route_methods.find(request.method()) == route_methods.end()) {
-            continue; // method does not match
+            continue;// method does not match
         }
         regex path_regex(route_path);
         if (!regex_match(request.path().url(), path_regex)) {
-            continue; // path does not match
+            continue;// path does not match
         }
 
         return route.second;

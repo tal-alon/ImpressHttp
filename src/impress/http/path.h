@@ -1,7 +1,7 @@
 #pragma once
 
-#include <string>
 #include <map>
+#include <string>
 
 typedef std::map<std::string, std::string> QueryParams;
 
@@ -17,6 +17,7 @@ public:
     const std::string &get_param(const std::string &key) const;
     std::string to_string() const;
     static Path from_string(const std::string &raw);
+
 private:
     static QueryParams parse_params(const std::string &raw_params);
 };

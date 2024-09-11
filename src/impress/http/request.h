@@ -1,9 +1,9 @@
 #pragma once
-#include <map>
-#include <string>
+#include "./headers.h"
 #include "./method.h"
 #include "./path.h"
-#include "./headers.h"
+#include <map>
+#include <string>
 
 #define CRLF "\r\n"
 

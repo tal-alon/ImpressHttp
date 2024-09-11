@@ -3,8 +3,8 @@
 #include <string>
 #pragma comment(lib, "Ws2_32.lib")
 
-#include "../logging/logger.h"
 #include "../http/request.h"
+#include "../logging/logger.h"
 #include "connection.h"
 #include "router.h"
 

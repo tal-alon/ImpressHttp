@@ -17,7 +17,7 @@ Response hello_world(const Request &req) {
     ss << "Hello, World!" << endl;
     ss << "got header: " << endl;
     for (auto &header : req.headers()) {
-        ss <<  "\t" << header.first << ": " << header.second << endl;
+        ss << "\t" << header.first << ": " << header.second << endl;
     }
     ss << "got params: " << endl;
     for (auto &param : req.query_params()) {
@@ -40,10 +40,6 @@ Server build_server() {
 
 
 int main() {
-//    WSAData wsaData;
-//    if (NO_ERROR != WSAStartup(MAKEWORD(2, 2), &wsaData)) {
-//        throw std::exception("Error at WSAStartup()");
-//    }
     WSAInitializer wsaInitializer;
 
     socket(AF_INET, SOCK_STREAM, 0);
@@ -59,9 +55,5 @@ int main() {
 //    Response response = app.router().handle_request(request);
 //    cout << response.to_string() << endl;
 
-
-    cout << "Cleaning up WSA" << endl;
-
-//    WSACleanup();
     return 0;
 }

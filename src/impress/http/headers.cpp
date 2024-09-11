@@ -56,4 +56,3 @@ map<string, string>::const_iterator Headers::begin() const {
 map<string, string>::const_iterator Headers::end() const {
     return m_headers.end();
 }
-
