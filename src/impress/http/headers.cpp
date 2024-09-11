@@ -12,8 +12,8 @@ bool Headers::has(const string &key) const {
     return m_headers.find(key) != m_headers.end();
 }
 
-std::string *Headers::operator[](const string &key) {
-    return &m_headers[key];
+std::string &Headers::operator[](const string &key) {
+    return m_headers[key];
 }
 
 const std::string *Headers::operator[](const string &key) const {
@@ -41,7 +41,7 @@ Headers Headers::from_string(const string &raw) {
             string key = line.substr(0, pos);
             string value = line.substr(pos + 1, line.size() - pos - 2);
             // +1 to skip the colon, -2 to skip the CRLF
-            *headers[key] = value;
+            headers[key] = value;
         } else {
             throw invalid_argument("Invalid header line: " + line);
         }
