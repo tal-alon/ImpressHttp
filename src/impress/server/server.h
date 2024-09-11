@@ -33,6 +33,7 @@ public:
 
 private:
     void bind_socket();
+    void start_listening();
     void exit_with_error(const std::string &message);
     void update_fd_sets();
     void accept_new_connection();

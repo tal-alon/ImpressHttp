@@ -5,16 +5,23 @@
 using namespace std;
 
 Socket::Socket(int af, int type, int protocol) {
-    this->connSocket = socket(af, type, protocol);
-    if (INVALID_SOCKET == this->connSocket) {
+    m_socket = socket(af, type, protocol);
+    if (INVALID_SOCKET == m_socket) {
         throw SocketError("Error at socket(): ");
     }
 }
 
 Socket::~Socket() {
-    closesocket(this->connSocket);
+    closesocket(m_socket);
+}
+
+void Socket::set_unblocking() {
+    unsigned long flag=1;
+    if (ioctlsocket(m_socket, FIONBIO, &flag) != 0) {
+        throw SocketError("Error at ioctlsocket(), socket:" + to_string(m_socket));
+    }
 }
 
 SOCKET Socket::descriptor() const {
-    return this->connSocket;
+    return m_socket;
 }

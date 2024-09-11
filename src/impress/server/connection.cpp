@@ -73,6 +73,7 @@ Request *Connection::get_waiting_request() { return m_waiting_request; }
 void Connection::clear_waiting_request() {
     delete m_waiting_request;
     m_waiting_request = nullptr;
+    m_send = SendStatus::IDLE;
 }
 
 char const *Connection::get_buffer() const {
@@ -91,10 +92,11 @@ char *Connection::try_pull_bytes(int size) {
     if (size > m_buffer_size) {
         return nullptr;
     }
-    char *result = new char[size];
+    char *result = new char[size + 1];
     memcpy(result, m_buffer, size);
     m_buffer_size -= size;
     memmove(m_buffer, m_buffer + size, m_buffer_size);
+    result[size] = '\0';
     return result;
 }
 
@@ -121,7 +123,7 @@ void Connection::close(bool force) {
 char *Connection::try_pull_until(const std::string &delimiter) {
     auto delimiter_size = (int) delimiter.size();
 
-    for (int i = 0; i < m_buffer_size - delimiter_size; i++) {
+    for (int i = 0; i <= m_buffer_size - delimiter_size; i++) {
         if (memcmp(m_buffer + i, delimiter.c_str(), delimiter_size) == 0) {
             return try_pull_bytes(i + delimiter_size);
         }

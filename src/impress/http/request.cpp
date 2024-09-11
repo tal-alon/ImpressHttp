@@ -20,7 +20,7 @@ const string &Request::version() const { return m_version; }
 const string &Request::body() const { return m_body; }
 void Request::set_body(const string &body) { m_body = body; }
 const Headers &Request::headers() const { return m_headers; }
-const std::string &Request::get_header(const string &key) const {
+const std::string *Request::get_header(const string &key) const {
     return m_headers[key];
 }
 string Request::to_string() const {
@@ -43,6 +43,14 @@ Request Request::from_string(const string &raw) {
     Headers headers = Headers::from_string(header_raw);
 
     return {method, path, version, body, headers};
+}
+
+int Request::content_length() const {
+    auto header = get_header("Content-Length");
+    if (header == nullptr) {
+        return 0;
+    }
+    return stoi(*header);
 }
 
 // TODO - parse query params from path

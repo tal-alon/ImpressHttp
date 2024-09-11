@@ -29,9 +29,10 @@ public:
     const std::string &body() const;
     void set_body(const std::string &body);
     const Headers &headers() const;
-    const std::string &get_header(const std::string &key) const;
+    const std::string *get_header(const std::string &key) const;
     std::string to_string() const;
     static Request from_string(const std::string &raw);
+    int content_length() const;
 
 private:
     static void parse_request_line(const std::string &line, Method &method, std::string &path, std::string &version);

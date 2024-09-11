@@ -4,11 +4,12 @@
 #include <WinSock2.h>
 
 class Socket {
-    SOCKET connSocket;
+    SOCKET m_socket;
 
 public:
     Socket(int af, int type, int protocol);
     ~Socket();
+    void set_unblocking();
     SOCKET descriptor() const;
 };
 

@@ -16,6 +16,8 @@ Server::Server(string ip, int port, Logger *logger) :
     m_address.sin_addr.s_addr = inet_addr(m_ip.c_str());
 
     set_logger(logger);
+
+    m_listen_sock.set_unblocking();
 }
 
 Server::Server(std::string ip, int port) : Server(std::move(ip), port, new DummyLogger()) {}
@@ -46,6 +48,7 @@ void Server::set_logger(Logger *logger) {
 void Server::run() {
     m_logger->info("Server is running on " + m_ip + ":" + to_string(m_port));
     bind_socket();
+    start_listening();
 
     while (true) {
         update_fd_sets();
@@ -58,6 +61,13 @@ void Server::bind_socket() {
     SOCKET sock_id = m_listen_sock.descriptor();
     if (SOCKET_ERROR == bind(sock_id, (sockaddr *) &m_address, sizeof(m_address))) {
         exit_with_error("Error at bind()");
+    }
+}
+
+void Server::start_listening() {
+    SOCKET sock_id = m_listen_sock.descriptor();
+    if (SOCKET_ERROR == listen(sock_id, SOMAXCONN)) {
+        exit_with_error("Error at listen()");
     }
 }
 
@@ -92,11 +102,10 @@ void Server::accept_new_connection() {
         exit_with_error("Error at accept()");
     }
 
-    m_logger->info(
-            "Accepted new connection, socket=" + to_string(client_socket) +
-            ", client_count=" + to_string(m_client_count));
+    m_logger->info("Accepted new connection, socket=" + to_string(client_socket));
     m_connections[m_client_count] = new Connection(client_socket, SendStatus::IDLE, m_logger);
     m_client_count++;
+    m_logger->info("new client count: " + to_string(m_client_count));
 }
 
 void Server::remove_connection(int index) {
@@ -139,15 +148,16 @@ void Server::check_for_completed_requests() {
         if (m_connections[i]->get_buffer_size() == 0) {
             continue;
         }
-        char *request = m_connections[i]->try_pull_until("\r\n\r\n");
-        if (request == nullptr) {
+        char *request_buff = m_connections[i]->try_pull_until("\r\n\r\n");
+        if (request_buff == nullptr) {
             continue;
         }
-        m_logger->info("Received request, socket=" + to_string(m_connections[i]->sock_id()));
-        auto http_request = new Request(Request::from_string(request));
-        m_logger->info("Parsed request: + " + http_request->to_string());
+        m_logger->info("Received request_buff, socket=" + to_string(m_connections[i]->sock_id()));
+        auto http_request = new Request(Request::from_string(request_buff));
+        m_logger->info("Parsed request_buff: + " + http_request->to_string());
         m_connections[i]->set_waiting_request(http_request);
-        auto content_length = atoi(http_request->get_header("Content-Length").c_str());
+
+        int content_length = http_request->content_length();
         if (content_length != 0) {
             auto body = m_connections[i]->try_pull_bytes(content_length);
             if (body != nullptr) {
