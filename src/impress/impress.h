@@ -6,7 +6,9 @@
 #include "http/response.h"
 #include "http/status.h"
 
-#include "init/wsa_initializer.h"
+#include "socket/socket.h"
+#include "socket/socket_error.h"
+#include "socket/wsa_initializer.h"
 
 #include "logging/logger.h"
 #include "logging/stream_logger.h"
