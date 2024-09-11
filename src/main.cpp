@@ -40,7 +40,7 @@ Server* build_server() {
 
 
 int main() {
-    WSAInitializer wsaInitializer;
+    WSAInitializer wsa;
     cout << "Impress Version: " << IMPRESS_VERSION << endl;
 
     Server *app = build_server();
