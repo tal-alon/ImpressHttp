@@ -16,21 +16,6 @@ SOCKET Connection::sock_id() const { return m_socket; }
 SendStatus Connection::send_status() const { return m_send; }
 void Connection::set_send_status(SendStatus status) { m_send = status; }
 
-SOCKET Connection::accept() {
-    if (m_closed) {
-        m_logger->error("Attempted to accept on a closed socket, socket=" + to_string(m_socket));
-        return INVALID_SOCKET;
-    }
-    SOCKET client_socket = ::accept(m_socket, nullptr, nullptr);
-    if (client_socket == INVALID_SOCKET) {
-        m_logger->error("Failed to accept connection, socket=" + to_string(m_socket));
-        close(true);
-        return INVALID_SOCKET;
-    }
-    m_logger->info("Accepted new connection, socket=" + to_string(client_socket));
-    return client_socket;
-}
-
 void Connection::receive() {
     if (m_closed) {
         m_logger->error("Attempted to receive on a closed socket, socket=" + to_string(m_socket));

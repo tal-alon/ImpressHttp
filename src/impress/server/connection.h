@@ -29,7 +29,6 @@ public:
     SOCKET sock_id() const;
     SendStatus send_status() const;
     void set_send_status(SendStatus status);
-    SOCKET accept();
     void receive();
     void send(const char *data, int size);
     void set_waiting_request(Request *request);
