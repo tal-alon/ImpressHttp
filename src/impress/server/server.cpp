@@ -103,10 +103,12 @@ void Server::accept_new_connection() {
         exit_with_error("Error at accept()");
     }
 
-    m_logger->info("Accepted new connection, socket=" + to_string(client_socket));
+    m_logger->info(
+            "Accepted new connection, socket=" +
+            to_string(client_socket) + ", new client count: " + to_string(m_client_count + 1)
+            );
     m_connections[m_client_count] = new Connection(client_socket, SendStatus::IDLE, m_logger);
     m_client_count++;
-    m_logger->info("new client count: " + to_string(m_client_count));
 }
 
 void Server::remove_connection(int index) {

@@ -9,7 +9,10 @@ Connection::Connection(
         Logger *logger) : m_socket(socket), m_send(send), m_logger(logger) {}
 
 Connection::~Connection() {
-    close();
+    delete m_waiting_request;
+    if (!m_closed) {
+        close();
+    }
 }
 SOCKET Connection::sock_id() const { return m_socket; }
 SendStatus Connection::send_status() const { return m_send; }
@@ -62,7 +65,7 @@ bool Connection::try_gather_request() {
     }
     m_logger->info("Received request_buff, socket=" + to_string(m_socket));
     m_waiting_request = new Request(Request::from_string(request_buff));
-    m_logger->info("Parsed request_buff: + " + m_waiting_request->to_string());
+    m_logger->info("Parsed request_buff: " + m_waiting_request->to_string());
 
     int content_length = m_waiting_request->content_length();
     if (content_length != 0) {
