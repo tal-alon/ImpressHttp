@@ -28,10 +28,9 @@ public:
     ~Connection();
     SOCKET sock_id() const;
     SendStatus send_status() const;
-    void set_send_status(SendStatus status);
     void receive();
     void send(const char *data, int size);
-    void set_waiting_request(Request *request);
+    bool try_gather_request();
     Request *get_waiting_request();
     void clear_waiting_request();
     char const *get_buffer() const;

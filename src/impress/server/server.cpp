@@ -142,29 +142,7 @@ void Server::handle_recv_and_send() {
 
 void Server::check_for_completed_requests() {
     for (int i = 0; i < m_client_count; i++) {
-        if (m_connections[i]->get_waiting_request() != nullptr) {
-            continue;
-        }
-        if (m_connections[i]->get_buffer_size() == 0) {
-            continue;
-        }
-        char *request_buff = m_connections[i]->try_pull_until("\r\n\r\n");
-        if (request_buff == nullptr) {
-            continue;
-        }
-        m_logger->info("Received request_buff, socket=" + to_string(m_connections[i]->sock_id()));
-        auto http_request = new Request(Request::from_string(request_buff));
-        m_logger->info("Parsed request_buff: + " + http_request->to_string());
-        m_connections[i]->set_waiting_request(http_request);
-
-        int content_length = http_request->content_length();
-        if (content_length != 0) {
-            auto body = m_connections[i]->try_pull_bytes(content_length);
-            if (body != nullptr) {
-                http_request->set_body(body);
-            }
-        }
-        m_connections[i]->set_send_status(SendStatus::SEND);
+        m_connections[i]->try_gather_request();
     }
 }
 void Server::handle_completed_request(int connection_index) {

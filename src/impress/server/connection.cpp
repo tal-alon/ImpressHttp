@@ -14,7 +14,6 @@ Connection::~Connection() {
 }
 SOCKET Connection::sock_id() const { return m_socket; }
 SendStatus Connection::send_status() const { return m_send; }
-void Connection::set_send_status(SendStatus status) { m_send = status; }
 
 void Connection::receive() {
     if (m_closed) {
@@ -53,7 +52,31 @@ void Connection::send(const char *data, int size) {
     m_logger->info("Sent " + to_string(bytes_sent) + " bytes, socket=" + to_string(m_socket));
 }
 
-void Connection::set_waiting_request(Request *request) { m_waiting_request = request; }
+bool Connection::try_gather_request() {
+    if (m_waiting_request != nullptr || m_buffer_size == 0) {
+        return false;
+    }
+    char *request_buff = try_pull_until("\r\n\r\n");
+    if (request_buff == nullptr) {
+        return false;
+    }
+    m_logger->info("Received request_buff, socket=" + to_string(m_socket));
+    m_waiting_request = new Request(Request::from_string(request_buff));
+    m_logger->info("Parsed request_buff: + " + m_waiting_request->to_string());
+
+    int content_length = m_waiting_request->content_length();
+    if (content_length != 0) {
+        auto body = try_pull_bytes(content_length);
+        // TODO if body is nullptr, we should wait for more data
+        if (body != nullptr) {
+            m_waiting_request->set_body(body);
+        }
+    }
+    m_send = SendStatus::SEND;
+
+    return true;
+}
+
 Request *Connection::get_waiting_request() { return m_waiting_request; }
 void Connection::clear_waiting_request() {
     delete m_waiting_request;
