@@ -51,7 +51,6 @@ void Server::run() {
     start_listening();
 
     while (true) {
-        remove_closed_connections();
         update_fd_sets();
         handle_recv_and_send();
     }
@@ -79,15 +78,6 @@ void Server::exit_with_error(const string &message) {
     exit(EXIT_FAILURE);
 }
 
-void Server::remove_closed_connections() {
-    for (int i = 0; i < m_client_count; i++) {
-        if (m_connections[i]->is_closed()) {
-            remove_connection(i);
-            i--;
-        }
-    }
-}
-
 void Server::update_fd_sets() {
     FD_ZERO(&m_wait_recv);
     FD_ZERO(&m_wait_send);
@@ -113,11 +103,7 @@ void Server::accept_new_connection() {
     }
 
     m_logger->info("Accepted new connection, socket=" + to_string(client_socket));
-    m_connections[m_client_count] = new Connection(
-            client_socket,
-            SendStatus::IDLE,
-            m_logger->clone()
-            );
+    m_connections[m_client_count] = new Connection(client_socket, SendStatus::IDLE, m_logger);
     m_client_count++;
     m_logger->info("new client count: " + to_string(m_client_count));
 }

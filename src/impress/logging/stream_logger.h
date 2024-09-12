@@ -6,7 +6,6 @@ class StreamLogger : public Logger {
 
 public:
     explicit StreamLogger(std::ostream &stream, LogLevel level = INFO_LVL);
-    Logger *clone() override;
 
 protected:
     void write(const std::string &message) override;
