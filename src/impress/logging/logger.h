@@ -18,6 +18,7 @@ public:
     void info(const std::string &message);
     void warn(const std::string &message);
     void error(const std::string &message);
+    virtual Logger *clone() = 0;
 
 protected:
     LogLevel m_level = INFO_LVL;

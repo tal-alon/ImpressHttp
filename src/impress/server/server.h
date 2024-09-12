@@ -35,6 +35,7 @@ private:
     void bind_socket();
     void start_listening();
     void exit_with_error(const std::string &message);
+    void remove_closed_connections();
     void update_fd_sets();
     void accept_new_connection();
     void remove_connection(int index);
