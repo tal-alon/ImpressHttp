@@ -9,7 +9,6 @@ Connection::Connection(
         Logger *logger) : m_socket(socket), m_send(send), m_logger(logger) {}
 
 Connection::~Connection() {
-    delete m_logger;
     close();
 }
 SOCKET Connection::sock_id() const { return m_socket; }
