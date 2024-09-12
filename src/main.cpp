@@ -1,4 +1,5 @@
 #include <impress.h>
+#include "./api/files.h"
 #include <iostream>
 #include <sstream>
 
@@ -38,19 +39,20 @@ Server* build_server() {
     return app;
 }
 
+void include_files_api(Server &server) {
+    APP_ROUTE(server, {HTTP_GET}, "^/$", list_files);
+    APP_ROUTE(server, {HTTP_GET}, "^/.+$", get_file);
+    APP_ROUTE(server, {HTTP_POST}, "^/.+$", upload_file);
+    APP_ROUTE(server, {HTTP_PUT}, "^/.+$", update_file);
+    APP_ROUTE(server, {HTTP_DELETE}, "^/.+$", delete_file);
+}
+
 
 int main() {
     WSAInitializer wsa;
     cout << "Impress Version: " << IMPRESS_VERSION << endl;
 
     Server *app = build_server();
+    include_files_api(*app);
     app->run();
-
-//    Request request = Request::from_string(EXAMPLE_REQUEST);
-//    cout << request.to_string() << endl;
-//
-//    Response response = app.router().handle_request(request);
-//    cout << response.to_string() << endl;
-
-    return 0;
 }
