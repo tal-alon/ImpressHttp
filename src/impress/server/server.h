@@ -26,6 +26,10 @@ public:
     Server(std::string ip, int port, Logger *logger);
     Server(std::string ip, int port);
     ~Server();
+    Server(const Server&) = delete; // non copyable
+    Server(Server &&other) = delete; // non movable
+    Server& operator=(const Server&) = delete; // non copy assignable
+    Server &operator=(Server &&other) = delete; // non move assignable
     Router &router();
     void set_router(Router router);
     void set_logger(Logger *logger);
