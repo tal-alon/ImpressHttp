@@ -39,6 +39,5 @@ private:
     void accept_new_connection();
     void remove_connection(int index);
     void handle_recv_and_send();
-    void check_for_completed_requests();
     void handle_completed_request(int connection_index);
 };

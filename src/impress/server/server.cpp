@@ -137,14 +137,11 @@ void Server::handle_recv_and_send() {
             n_ready--;
         }
     }
-    check_for_completed_requests();
-}
-
-void Server::check_for_completed_requests() {
     for (int i = 0; i < m_client_count; i++) {
         m_connections[i]->try_gather_request();
     }
 }
+
 void Server::handle_completed_request(int connection_index) {
     Connection &connection = *m_connections[connection_index];
     auto request = connection.get_waiting_request();
