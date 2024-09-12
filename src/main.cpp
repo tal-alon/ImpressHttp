@@ -3,7 +3,7 @@
 #include <iostream>
 #include <sstream>
 
-#define APP_ROUTE(server, methods, path, handler) server.router().add_route(methods, path, handler)
+#define APP_ROUTE(server, methods, path) server.router().add_route(methods, path)
 
 using namespace std;
 
@@ -34,17 +34,17 @@ Server* build_server() {
     logger->info("Building server...");
 
     auto app = new Server("127.0.0.1", 8000, logger);
-    APP_ROUTE((*app), {HTTP_GET}, ".+", hello_world);
+    APP_ROUTE((*app), {HTTP_GET}, "/hello")(hello_world);
 
     return app;
 }
 
 void include_files_api(Server &server) {
-    APP_ROUTE(server, {HTTP_GET}, "^/$", list_files);
-    APP_ROUTE(server, {HTTP_GET}, "^/.+$", get_file);
-    APP_ROUTE(server, {HTTP_POST}, "^/.+$", upload_file);
-    APP_ROUTE(server, {HTTP_PUT}, "^/.+$", update_file);
-    APP_ROUTE(server, {HTTP_DELETE}, "^/.+$", delete_file);
+    APP_ROUTE(server, {HTTP_GET}, "^/$")(list_files);
+    APP_ROUTE(server, {HTTP_GET}, "^/.+$")(get_file);
+    APP_ROUTE(server, {HTTP_POST}, "^/.+$")(upload_file);
+    APP_ROUTE(server, {HTTP_PUT}, "^/.+$")(update_file);
+    APP_ROUTE(server, {HTTP_DELETE}, "^/.+$")(delete_file);
 }
 
 
@@ -53,6 +53,12 @@ int main() {
     cout << "Impress Version: " << IMPRESS_VERSION << endl;
 
     Server *app = build_server();
+
+    APP_ROUTE((*app), {HTTP_GET}, "/")
+    ([](const Request &req) -> Response {
+        return {Status::OK_200, "Hello, World!"};
+    });
+
     include_files_api(*app);
     app->run();
 }

@@ -17,7 +17,19 @@ class Router {
     RouteMap m_routes;
 
 public:
-    void add_route(std::set<Method> methods, const std::string &url, RouteHandler handler);
+    class RouteAdder {
+        Router &m_router;
+        std::set<Method> m_methods;
+        std::string m_url;
+
+    public:
+        explicit RouteAdder(Router &router, std::set<Method> methods, std::string url);
+        void register_handler(RouteHandler handler);
+        void operator()(RouteHandler handler);
+    };
+
+    void add_route(const std::set<Method>& methods, const std::string &url, RouteHandler handler);
+    Router::RouteAdder add_route(std::set<Method> methods, const std::string &url);
     Response handle_request(const Request &request);
 
 private:
