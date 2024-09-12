@@ -1,6 +1,6 @@
 #include "files.h"
 
-Response list_files(Request &request) {
+Response list_files(const Request &request) {
     return { Status::OK_200 };
 }
 
