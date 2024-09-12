@@ -40,4 +40,5 @@ private:
     void remove_connection(int index);
     void handle_recv_and_send();
     void handle_completed_request(int connection_index);
+    void remove_closed_connections();
 };

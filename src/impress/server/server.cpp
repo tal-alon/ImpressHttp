@@ -53,6 +53,7 @@ void Server::run() {
     while (true) {
         update_fd_sets();
         handle_recv_and_send();
+        remove_closed_connections();
     }
 }
 
@@ -151,4 +152,12 @@ void Server::handle_completed_request(int connection_index) {
     auto buffer_size = (int) res_string.size();
     connection.send(buffer, buffer_size);
     connection.clear_waiting_request();
+}
+
+void Server::remove_closed_connections() {
+    for (int i = 0; i < m_client_count; i++) {
+        if (m_connections[i]->is_closed()) {
+            remove_connection(i);
+        }
+    }
 }

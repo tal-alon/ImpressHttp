@@ -28,6 +28,7 @@ public:
     ~Connection();
     SOCKET sock_id() const;
     SendStatus send_status() const;
+    bool is_closed() const;
     void receive();
     void send(const char *data, int size);
     bool try_gather_request();

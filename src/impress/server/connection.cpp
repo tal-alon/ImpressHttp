@@ -13,6 +13,7 @@ Connection::~Connection() {
 }
 SOCKET Connection::sock_id() const { return m_socket; }
 SendStatus Connection::send_status() const { return m_send; }
+bool Connection::is_closed() const { return m_closed; }
 
 void Connection::receive() {
     if (m_closed) {
