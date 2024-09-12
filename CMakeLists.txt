@@ -31,5 +31,6 @@ target_include_directories(impress_http PUBLIC ${CMAKE_SOURCE_DIR}/src/impress)
 add_executable(
         main src/main.cpp
         src/api/files.h src/api/files.cpp
+        src/config.h
 )
 target_link_libraries(main PRIVATE impress_http)
