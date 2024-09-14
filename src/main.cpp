@@ -7,10 +7,6 @@
 
 using namespace std;
 
-const string EXAMPLE_REQUEST = "GET /index.html?param1=1&param2=2 HTTP/1.1\r\n"
-                               "Host: localhost:8080\r\n"
-                               "User-Agent: curl/7.68.0\r\n"
-                               "Accept: */*\r\n\r\n";
 
 Response hello_world(const Request &req) {
     stringstream ss("");
@@ -35,6 +31,10 @@ Server* build_server() {
 
     auto app = new Server("127.0.0.1", 8000, logger);
     APP_ROUTE((*app), {HTTP_GET}, "/hello/.+")(hello_world);
+    APP_ROUTE((*app), {HTTP_GET}, "/ping")
+    ([](const Request &req) -> Response {
+        return {Status::OK_200, "pong"};
+    });
 
     return app;
 }
@@ -53,11 +53,6 @@ int main() {
     cout << "Impress Version: " << IMPRESS_VERSION << endl;
 
     Server *app = build_server();
-
-    APP_ROUTE((*app), {HTTP_GET}, "/ping")
-    ([](const Request &req) -> Response {
-        return {Status::OK_200, "pong"};
-    });
 
     include_files_api(*app);
     app->run();
