@@ -26,7 +26,12 @@ Response Router::handle_request(const Request &request) {
     if (handler == nullptr) {
         return {request.version(), Status::NotFound_404, Headers(), ""};
     }
-    return handler(request);
+
+    try {
+        return handler(request);
+    } catch (exception &e) {
+        return {request.version(), Status::InternalServerError_500, Headers(), e.what()};
+    }
 }
 
 RouteHandler Router::get_handler(const Request &request) {
