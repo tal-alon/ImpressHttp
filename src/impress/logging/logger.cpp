@@ -10,9 +10,9 @@ std::string level_to_string(LogLevel level) {
         case DEBUG_LVL:
             return "DEBUG";
         case INFO_LVL:
-            return "INFO";
+            return "INFO ";
         case WARN_LVL:
-            return "WARN";
+            return "WARN ";
         case ERROR_LVL:
             return "ERROR";
         default:

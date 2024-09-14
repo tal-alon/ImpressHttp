@@ -18,7 +18,7 @@ Socket::~Socket() {
 void Socket::set_unblocking() {
     unsigned long flag=1;
     if (ioctlsocket(m_socket, FIONBIO, &flag) != 0) {
-        throw SocketError("Error at ioctlsocket(), socket:" + to_string(m_socket));
+        throw SocketError("socket:" + to_string(m_socket) + "Error at ioctlsocket()");
     }
 }
 

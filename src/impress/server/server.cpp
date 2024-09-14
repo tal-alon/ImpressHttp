@@ -18,6 +18,11 @@ Server::Server(string ip, int port, Logger *logger) :
     set_logger(logger);
 
     m_listen_sock.set_unblocking();
+
+    // initialize the connections array
+    for (int i = 0; i < MAX_CONNECTIONS; i++) {
+        m_connections[i] = nullptr;
+    }
 }
 
 Server::Server(std::string ip, int port) : Server(std::move(ip), port, new DummyLogger()) {}
@@ -57,7 +62,6 @@ void Server::run() {
     }
 }
 
-
 void Server::bind_socket() {
     SOCKET sock_id = m_listen_sock.descriptor();
     if (SOCKET_ERROR == bind(sock_id, (sockaddr *) &m_address, sizeof(m_address))) {
@@ -86,6 +90,8 @@ void Server::update_fd_sets() {
     FD_SET(m_listen_sock.descriptor(), &m_wait_recv);
 
     for (int i = 0; i < m_client_count; i++) {
+        if (m_connections[i]->is_closed())
+            m_logger->error("socket=" + to_string(m_connections[i]->sock_id()) + " trying to set a closed connection!!!");
         FD_SET(m_connections[i]->sock_id(), &m_wait_recv);
         if (m_connections[i]->send_status() == SendStatus::SEND) {
             FD_SET(m_connections[i]->sock_id(), &m_wait_send);
@@ -112,9 +118,9 @@ void Server::accept_new_connection() {
 }
 
 void Server::remove_connection(int index) {
-    m_logger->info("Removing connection, socket=" + to_string(m_connections[index]->sock_id()));
+    m_logger->info("socket=" + to_string(m_connections[index]->sock_id()) + " Removing connection");
     delete m_connections[index];
-    m_connections[index] = m_connections[m_client_count - 1];
+    m_connections[index] = nullptr;
     m_client_count--;
 }
 
@@ -157,9 +163,24 @@ void Server::handle_completed_request(int connection_index) {
 }
 
 void Server::remove_closed_connections() {
-    for (int i = 0; i < m_client_count; i++) {
+    m_logger->info("removing closed connections, " + to_string(m_client_count) + " connections");
+
+    // first pass to remove and free closed connections objects
+    int client_count = m_client_count;
+    for (int i = 0; i < client_count; i++) {
         if (m_connections[i]->is_closed()) {
             remove_connection(i);
+        }
+    }
+
+    // second pass to compact the connections array
+    int n_deleted = 0;
+    for (int i = 0; i < MAX_CONNECTIONS; i++) {
+        if (m_connections[i] == nullptr) {
+            n_deleted++;
+        } else if (n_deleted > 0) {
+            m_connections[i - n_deleted] = m_connections[i];
+            m_connections[i] = nullptr;
         }
     }
 }
