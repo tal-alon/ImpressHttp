@@ -5,6 +5,8 @@
 #include <vector>
 #include <string>
 #include <sstream>
+#include <fstream>
+#include <iostream>
 
 using namespace std;
 
@@ -54,7 +56,18 @@ Response list_files(const Request &request) {
 }
 
 Response get_file(const Request &request) {
-    return { Status::OK_200, "get file" };
+    auto file_name = ROOT_DIR + request.path().url();
+
+    ifstream file(file_name);
+    if (!file) {
+        return { Status::NotFound_404, "File not found" };
+    }
+
+    stringstream buffer;
+    buffer << file.rdbuf();
+    file.close();
+
+    return { Status::OK_200, buffer.str() };
 }
 
 Response upload_file(const Request &request) {
@@ -66,5 +79,11 @@ Response update_file(const Request &request) {
 }
 
 Response delete_file(const Request &request) {
-    return { Status::OK_200, "delete file" };
+   auto file_name = ROOT_DIR + request.path().url();
+
+    if (remove(file_name.c_str()) == 0) {
+        return { Status::NoContent_204 };
+    } else {
+        return { Status::NotFound_404, "File not found" };
+    }
 }
