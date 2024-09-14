@@ -56,6 +56,7 @@ Response list_files(const Request &request) {
 }
 
 Response get_file(const Request &request) {
+    // TODO handle headers such as language, etc.
     auto file_name = ROOT_DIR + request.path().url();
 
     ifstream file(file_name);
