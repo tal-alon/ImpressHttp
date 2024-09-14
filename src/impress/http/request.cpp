@@ -53,7 +53,6 @@ int Request::content_length() const {
     return stoi(*header);
 }
 
-// TODO - parse query params from path
 void Request::parse_request_line(const string &line, Method &method, string &path, string &version) {
     istringstream stream(line);
     stream >> method >> path >> version;

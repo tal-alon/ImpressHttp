@@ -56,7 +56,11 @@ void Connection::send(const char *data, int size) {
 }
 
 bool Connection::try_gather_request() {
-    if (m_waiting_request != nullptr || m_buffer_size == 0) {
+    if (m_buffer_size == 0) {
+        return false;
+    }
+    if (m_waiting_request != nullptr) {
+        // TODO check if we have the whole body
         return false;
     }
     char *request_buff = try_pull_until("\r\n\r\n");
@@ -75,8 +79,9 @@ bool Connection::try_gather_request() {
             m_waiting_request->set_body(body);
         }
     }
+    // TODO only set the status to send if the request is complete
+    // i.e. we have the whole body (body size == content length)
     m_send = SendStatus::SEND;
-
     return true;
 }
 
