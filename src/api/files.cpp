@@ -56,7 +56,21 @@ Response list_files(const Request &request) {
 }
 
 Response get_file(const Request &request) {
+
     auto file_name = ROOT_DIR + request.path().url();
+    const QueryParams& params = request.query_params();
+
+    auto lang_it = params.find("lang"); // map iterator
+    if (lang_it != params.end()) {
+        string lang = lang_it->second;
+        size_t dot_pos = file_name.find_last_of('.');
+        if (dot_pos != string::npos) {
+            file_name.insert(dot_pos, "." + lang);
+        }
+        else {
+            file_name += "." + lang;
+        }
+    }
 
     ifstream file(file_name);
     if (!file) {
