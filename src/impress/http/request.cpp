@@ -16,6 +16,9 @@ const Path &Request::path() const { return m_path; }
 const QueryParams &Request::query_params() const {
     return m_path.params();
 }
+const string *Request::get_query_param(const string &key) const {
+    return m_path.get_param(key);
+}
 const string &Request::version() const { return m_version; }
 const string &Request::body() const { return m_body; }
 void Request::set_body(const string &body) { m_body = body; }

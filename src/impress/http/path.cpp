@@ -11,8 +11,12 @@ const string &Path::url() const { return m_url; }
 
 const QueryParams &Path::params() const { return m_params; }
 
-const string &Path::get_param(const string &key) const {
-    return m_params.at(key);// TODO - handle missing key
+const string *Path::get_param(const string &key) const {
+    auto it = m_params.find(key);
+    if (it == m_params.end()) {
+        return nullptr;
+    }
+    return &it->second;
 }
 
 string Path::to_string() const {

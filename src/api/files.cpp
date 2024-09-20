@@ -44,6 +44,16 @@ vector<string> list_files(const string& dir) {
     return file_names;
 }
 
+void insert_lang_extension(string& file_name, const string& lang) {
+    size_t dot_pos = file_name.find_last_of('.');
+
+    if (dot_pos != string::npos) {
+        file_name.insert(dot_pos, "." + lang);
+    } else {
+        file_name += "." + lang;
+    }
+}
+
 
 void include_files_routes(Router &router) {
     router.add_route({HTTP_GET}, "/", list_files);
@@ -65,18 +75,10 @@ Response list_files(const Request &request) {
 
 Response get_file(const Request &request) {
     auto file_name = ROOT_DIR + request.path().url();
-    const QueryParams& params = request.query_params();
+    auto lang = request.get_query_param("lang");
 
-    auto lang_it = params.find("lang"); // map iterator
-    if (lang_it != params.end()) {
-        string lang = lang_it->second;
-        size_t dot_pos = file_name.find_last_of('.');
-        if (dot_pos != string::npos) {
-            file_name.insert(dot_pos, "." + lang);
-        }
-        else {
-            file_name += "." + lang;
-        }
+    if (lang != nullptr) {
+        insert_lang_extension(file_name, *lang);
     }
 
     ifstream file(file_name);

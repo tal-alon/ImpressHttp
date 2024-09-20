@@ -25,6 +25,7 @@ public:
     Method method() const;
     const Path &path() const;
     const QueryParams &query_params() const;
+    const std::string *get_query_param(const std::string &key) const;
     const std::string &version() const;
     const std::string &body() const;
     void set_body(const std::string &body);

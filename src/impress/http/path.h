@@ -14,7 +14,7 @@ public:
     Path(std::string url, QueryParams params);
     const std::string &url() const;
     const QueryParams &params() const;
-    const std::string &get_param(const std::string &key) const;
+    const std::string *get_param(const std::string &key) const;
     std::string to_string() const;
     static Path from_string(const std::string &raw);
 
