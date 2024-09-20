@@ -2,6 +2,7 @@
 
 #include <impress.h>
 
+void include_files_routes(Router &router);
 Response list_files(const Request &request);
 Response get_file(const Request &request);
 Response upload_file(const Request &request);

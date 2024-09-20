@@ -45,6 +45,14 @@ vector<string> list_files(const string& dir) {
 }
 
 
+void include_files_routes(Router &router) {
+    router.add_route({HTTP_GET}, "/", list_files);
+    router.add_route({HTTP_GET}, "/.+", get_file);
+    router.add_route({HTTP_POST}, "/.+", upload_file);
+    router.add_route({HTTP_PUT}, "/.+", update_file);
+    router.add_route({HTTP_DELETE}, "/.+", delete_file);
+}
+
 Response list_files(const Request &request) {
     auto files = list_files(ROOT_DIR);
     stringstream ss("");
