@@ -56,8 +56,20 @@ Response list_files(const Request &request) {
 }
 
 Response get_file(const Request &request) {
-    // TODO handle headers such as language, etc.
     auto file_name = ROOT_DIR + request.path().url();
+    const QueryParams& params = request.query_params();
+
+    auto lang_it = params.find("lang"); // map iterator
+    if (lang_it != params.end()) {
+        string lang = lang_it->second;
+        size_t dot_pos = file_name.find_last_of('.');
+        if (dot_pos != string::npos) {
+            file_name.insert(dot_pos, "." + lang);
+        }
+        else {
+            file_name += "." + lang;
+        }
+    }
 
     ifstream file(file_name);
     if (!file) {
@@ -71,13 +83,58 @@ Response get_file(const Request &request) {
     return { Status::OK_200, buffer.str() };
 }
 
-Response upload_file(const Request &request) {
-    return { Status::OK_200, "upload file" };
+Response upload_file(const Request& request) {
+
+    auto full_path = ROOT_DIR + request.path().url();
+
+    ifstream existing_file(full_path);
+    if (existing_file.good()) {
+        existing_file.close();
+        return { Status::Conflict_409, "File already exists." };
+    }
+
+    ofstream out_file(full_path, ios::binary);
+
+    if (!out_file.is_open()) {
+        return { Status::InternalServerError_500, "Failed to open file for writing." };
+    }
+
+    try {
+        out_file.write(request.body().c_str(), request.content_length());
+        out_file.close();
+    } catch (const exception& e) {
+        return { Status::InternalServerError_500, string("Failed to write to file: ") + e.what() };
+    }
+
+    return { Status::Created_201, "File uploaded successfully." };
 }
 
-Response update_file(const Request &request) {
-    return { Status::OK_200, "update file" };
+Response update_file(const Request& request) {
+    auto full_path = ROOT_DIR + request.path().url();
+
+    ifstream in_file(full_path);
+    if (!in_file.good()) {
+        in_file.close();
+        return { Status::NotFound_404, "File not found" };
+    }
+    in_file.close();
+
+    ofstream out_file(full_path, ios::binary | ios::trunc);
+
+    if (!out_file.is_open()) {
+        return { Status::InternalServerError_500, "Failed to open file for writing." };
+    }
+
+    try {
+        out_file.write(request.body().c_str(), request.content_length());
+        out_file.close();
+    } catch (const exception& e) {
+        return { Status::InternalServerError_500, string("Failed to update file: ") + e.what() };
+    }
+
+    return { Status::OK_200, "File updated successfully." };
 }
+
 
 Response delete_file(const Request &request) {
    auto file_name = ROOT_DIR + request.path().url();
