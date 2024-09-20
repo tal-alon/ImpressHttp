@@ -73,6 +73,8 @@ Response list_files(const Request &request) {
     return { Status::OK_200, ss.str() };
 }
 
+// TODO - If a language is not found, return the default file
+// TODO return a language header
 Response get_file(const Request &request) {
     auto file_name = ROOT_DIR + request.path().url();
     auto lang = request.get_query_param("lang");
