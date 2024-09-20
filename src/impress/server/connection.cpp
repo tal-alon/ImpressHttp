@@ -28,7 +28,7 @@ void Connection::receive() {
     int buffer_size = CONNECTION_BUFFER_SIZE - m_buffer_size;
     int bytes_recv = recv(m_socket, buffer, buffer_size, 0);
     if (bytes_recv == 0) {
-        m_logger->info("socket=" + to_string(m_socket) + " Received an empty segment");
+        m_logger->debug("socket=" + to_string(m_socket) + " Received an empty segment");
         close();
         return;
     }
@@ -38,7 +38,7 @@ void Connection::receive() {
         return;
     }
     m_buffer_size += bytes_recv;
-    m_logger->info("socket=" + to_string(m_socket) + " Received " + to_string(bytes_recv) + " bytes");
+    m_logger->debug("socket=" + to_string(m_socket) + " Received " + to_string(bytes_recv) + " bytes");
 }
 
 void Connection::send(const char *data, int size) {
@@ -52,7 +52,7 @@ void Connection::send(const char *data, int size) {
         close(true);
         return;
     }
-    m_logger->info("socket=" + to_string(m_socket) + " Sent " + to_string(bytes_sent) + " bytes");
+    m_logger->debug("socket=" + to_string(m_socket) + " Sent " + to_string(bytes_sent) + " bytes");
 }
 
 bool Connection::try_gather_request() {
@@ -67,9 +67,9 @@ bool Connection::try_gather_request() {
     if (request_buff == nullptr) {
         return false;
     }
-    m_logger->info("socket=" + to_string(m_socket) + " Received request_buff");
+    m_logger->debug("socket=" + to_string(m_socket) + " Received request_buff");
     m_waiting_request = new Request(Request::from_string(request_buff));
-    m_logger->info("Parsed request_buff: " + m_waiting_request->to_string());
+    m_logger->debug("Parsed request_buff: " + m_waiting_request->to_string());
 
     int content_length = m_waiting_request->content_length();
     if (content_length != 0) {
@@ -118,11 +118,11 @@ char *Connection::try_pull_bytes(int size) {
 
 void Connection::close(bool force) {
     if (m_closed) {
-        m_logger->info("socket=" + to_string(m_socket) + " Connection already closed");
+        m_logger->debug("socket=" + to_string(m_socket) + " Connection already closed");
         return;
     }
     if (!force) {
-        m_logger->info("socket=" + to_string(m_socket) + " Closing connection");
+        m_logger->debug("socket=" + to_string(m_socket) + " Closing connection");
     } else {
         int error = WSAGetLastError();
         m_logger->warn(
@@ -130,7 +130,7 @@ void Connection::close(bool force) {
                 ", error=" + to_string(error));
     }
 
-    m_logger->info("socket=" + to_string(m_socket) + " Closing connection");
+    m_logger->debug("socket=" + to_string(m_socket) + " Closing connection");
 
     m_closed = true;
     closesocket(m_socket);

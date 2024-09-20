@@ -26,7 +26,7 @@ Response hello_world(const Request &req) {
 
 
 Server* build_server() {
-    auto logger = new StreamLogger(cout, DEBUG_LVL);
+    auto logger = new StreamLogger(cout, INFO_LVL);
     logger->info("Building server...");
 
     auto app = new Server("127.0.0.1", 8000, logger);

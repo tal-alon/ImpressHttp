@@ -109,7 +109,7 @@ void Server::accept_new_connection() {
         exit_with_error("Error at accept()");
     }
 
-    m_logger->info(
+    m_logger->debug(
             "Accepted new connection, socket=" +
             to_string(client_socket) + ", new client count: " + to_string(m_client_count + 1)
             );
@@ -118,7 +118,7 @@ void Server::accept_new_connection() {
 }
 
 void Server::remove_connection(int index) {
-    m_logger->info("socket=" + to_string(m_connections[index]->sock_id()) + " Removing connection");
+    m_logger->debug("socket=" + to_string(m_connections[index]->sock_id()) + " Removing connection");
     delete m_connections[index];
     m_connections[index] = nullptr;
     m_client_count--;
@@ -154,7 +154,11 @@ void Server::handle_recv_and_send() {
 void Server::handle_completed_request(int connection_index) {
     Connection &connection = *m_connections[connection_index];
     auto request = connection.get_waiting_request();
+    m_logger->info(request->method() + " " + request->path().to_string() + " " + request->version());
+
     auto response = m_router.handle_request(*request);
+    m_logger->info(status_to_string(response.status()) + " " + response.version());
+
     auto res_string = response.to_string();
     auto buffer = res_string.c_str();
     auto buffer_size = (int) res_string.size();
@@ -163,7 +167,7 @@ void Server::handle_completed_request(int connection_index) {
 }
 
 void Server::remove_closed_connections() {
-    m_logger->info("removing closed connections, " + to_string(m_client_count) + " connections");
+    m_logger->debug("removing closed connections, " + to_string(m_client_count) + " connections");
 
     // first pass to remove and free closed connections objects
     int client_count = m_client_count;
