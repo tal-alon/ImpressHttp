@@ -1,0 +1,149 @@
+{
+    "info": {
+        "name": "File API Collection with Logical Flow",
+        "description": "Collection for File API running on localhost:8000 with logical steps",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "1. List Files",
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                    "raw": "http://localhost:8000/",
+                    "protocol": "http",
+                    "host": ["localhost"],
+                    "port": "8000",
+                    "path": ["/"]
+                }
+            }
+        },
+        {
+            "name": "2. Upload File",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/octet-stream"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "This is a new file being uploaded.",
+                    "options": {
+                        "raw": {
+                            "language": "text"
+                        }
+                    }
+                },
+                "url": {
+                    "raw": "http://localhost:8000/testfile.txt",
+                    "protocol": "http",
+                    "host": ["localhost"],
+                    "port": "8000",
+                    "path": ["/testfile.txt"]
+                }
+            }
+        },
+        {
+            "name": "3. List Files After Upload",
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                    "raw": "http://localhost:8000/",
+                    "protocol": "http",
+                    "host": ["localhost"],
+                    "port": "8000",
+                    "path": ["/"]
+                }
+            }
+        },
+        {
+            "name": "4. Get Uploaded File",
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                    "raw": "http://localhost:8000/testfile.txt",
+                    "protocol": "http",
+                    "host": ["localhost"],
+                    "port": "8000",
+                    "path": ["/testfile.txt"]
+                }
+            }
+        },
+        {
+            "name": "5. Update File",
+            "request": {
+                "method": "PUT",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/octet-stream"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "This file has been updated with new content.",
+                    "options": {
+                        "raw": {
+                            "language": "text"
+                        }
+                    }
+                },
+                "url": {
+                    "raw": "http://localhost:8000/testfile.txt",
+                    "protocol": "http",
+                    "host": ["localhost"],
+                    "port": "8000",
+                    "path": ["/testfile.txt"]
+                }
+            }
+        },
+        {
+            "name": "6. Get Updated File",
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                    "raw": "http://localhost:8000/testfile.txt",
+                    "protocol": "http",
+                    "host": ["localhost"],
+                    "port": "8000",
+                    "path": ["/testfile.txt"]
+                }
+            }
+        },
+        {
+            "name": "7. Delete File",
+            "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                    "raw": "http://localhost:8000/testfile.txt",
+                    "protocol": "http",
+                    "host": ["localhost"],
+                    "port": "8000",
+                    "path": ["/testfile.txt"]
+                }
+            }
+        },
+        {
+            "name": "8. List Files After Delete",
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                    "raw": "http://localhost:8000/",
+                    "protocol": "http",
+                    "host": ["localhost"],
+                    "port": "8000",
+                    "path": ["/"]
+                }
+            }
+        }
+    ]
+}
