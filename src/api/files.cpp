@@ -96,14 +96,14 @@ Response upload_file(const Request& request) {
     ofstream out_file(full_path, ios::binary);
 
     if (!out_file.is_open()) {
-        return { Status::InternalServerError_500, "Failed to open file for writing." };
+        return { Status::NotAvailable_503, "Failed to open file for writing." };
     }
 
     try {
         out_file.write(request.body().c_str(), request.content_length());
         out_file.close();
     } catch (const exception& e) {
-        return { Status::InternalServerError_500, string("Failed to write to file: ") + e.what() };
+        return { Status::NotAvailable_503, string("Failed to write to file: ") + e.what() };
     }
 
     return { Status::Created_201, "File uploaded successfully." };

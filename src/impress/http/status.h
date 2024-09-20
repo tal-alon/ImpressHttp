@@ -17,6 +17,7 @@ enum class Status {
     UnprocessableEntity_422 = 422,
     InternalServerError_500 = 500,
     NotImplemented_501 = 501,
+    NotAvailable_503 = 503,
 };
 
 const std::map<Status, std::string> STATUS_MAP = {
