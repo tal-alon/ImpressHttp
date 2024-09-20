@@ -41,6 +41,10 @@ void list_files_rec(const string& dir, vector<string>& file_names) {
 vector<string> list_files(const string& dir) {
     vector<string> file_names;
     list_files_rec(dir, file_names);
+
+    for (auto &file : file_names) {
+        file = file.substr(strlen(ROOT_DIR));
+    }
     return file_names;
 }
 
@@ -66,11 +70,19 @@ void include_files_routes(Router &router) {
 Response list_files(const Request &request) {
     auto files = list_files(ROOT_DIR);
     stringstream ss("");
-    for (auto &file : files) {
-        ss << file << endl;
-    }
 
-    return { Status::OK_200, ss.str() };
+    ss << "[" << endl;
+    for (auto &file : files) {
+        ss << file << "," << endl;
+    }
+    ss << "]";
+
+    return {
+            request.version(),
+            Status::OK_200,
+            Headers({{"Content-Type", "application/json"}}),
+            ss.str()
+    };
 }
 
 // TODO - If a language is not found, return the default file
