@@ -1,6 +1,6 @@
 {
     "info": {
-        "name": "File API Collection with Logical Flow",
+        "name": "Files Server Collection with Logical Flow",
         "description": "Collection for File API running on localhost:8000 with logical steps",
         "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
     },

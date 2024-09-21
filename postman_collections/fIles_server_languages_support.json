@@ -1,0 +1,79 @@
+{
+	"info": {
+		"_postman_id": "a98099fb-86f6-4edf-957f-13e2467cf0cb",
+		"name": "FIles Server Languages Support",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "9642700"
+	},
+	"item": [
+		{
+			"name": "Get the default file (en)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/index.html",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"index.html"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get the French (fr) version",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/index.html?lang=fr",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"index.html"
+					],
+					"query": [
+						{
+							"key": "lang",
+							"value": "fr"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get the Espaniol (es) version",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/index.html?lang=es",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"index.html"
+					],
+					"query": [
+						{
+							"key": "lang",
+							"value": "es"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
