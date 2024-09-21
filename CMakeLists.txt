@@ -5,10 +5,13 @@ set(CMAKE_CXX_STANDARD 14)
 
 set(COMMON_SOURCES
         src/impress/impress.h
-        src/impress/http/request.cpp src/impress/http/request.h
+        src/impress/http/headers.cpp src/impress/http/headers.h
+        src/impress/http/message.cpp src/impress/http/message.h
         src/impress/http/method.h
-        src/impress/http/status.cpp src/impress/http/status.h
         src/impress/http/path.cpp src/impress/http/path.h
+        src/impress/http/request.cpp src/impress/http/request.h
+        src/impress/http/response.cpp src/impress/http/response.h
+        src/impress/http/status.cpp src/impress/http/status.h
 
         src/impress/logging/logger.cpp src/impress/logging/logger.h
         src/impress/logging/dummy_logger.h
@@ -17,8 +20,6 @@ set(COMMON_SOURCES
         src/impress/server/server.cpp src/impress/server/server.h
         src/impress/server/connection.cpp src/impress/server/connection.h
         src/impress/server/router.cpp src/impress/server/router.h
-        src/impress/http/response.cpp src/impress/http/response.h
-        src/impress/http/headers.cpp src/impress/http/headers.h
 
         src/impress/socket/wsa_initializer.cpp src/impress/socket/wsa_initializer.h
         src/impress/socket/socket.cpp src/impress/socket/socket.h
